@@ -1,0 +1,22 @@
+.navbar {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+}
+
+.navbar .home {
+  margin: 5px;
+  height: 50px;
+  width: 50px;
+}
+
+.navbar .menu {
+  flex: 1;
+  justify-content: end;
+}
+
+
+.navbar .home img {
+  height: 100%;
+  width: 100%;
+}

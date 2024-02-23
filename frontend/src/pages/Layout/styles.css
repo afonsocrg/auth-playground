@@ -1,0 +1,25 @@
+.layout {
+  border-radius: 8;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  padding: 48px;
+}
+
+.footer {
+  text-align: center;
+  color: black;
+  /* background-color: #4096ff; */
+}
