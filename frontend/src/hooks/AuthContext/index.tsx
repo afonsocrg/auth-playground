@@ -1,4 +1,5 @@
 import { useContext, createContext, useState } from "react";
+import { useLocalStorage } from 'usehooks-ts'
 
 type AuthProviderType = {
   isAuthenticated: boolean;
@@ -8,7 +9,8 @@ type AuthProviderType = {
 const AuthContext = createContext({} as AuthProviderType);
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useLocalStorage('user', null)
+  // const [user, setUser] = useState(null);
   // TODO: when renders for the first time fetches the api to check if it is authenticated (?)
   // or use localstorage to remember if the user is authenticated
   const isAuthenticated = user !== null;

@@ -27,13 +27,13 @@ To get started with this project, follow these steps:
 
 1. **Clone the Repository**: Clone this repository to your local machine.
    ```bash
-   git clone https://github.com/yourusername/toy-todo-app.git
+   git clone git@github.com:afonsocrg/auth-playground.git
    ```
 
 2. **Install Dependencies**: Navigate to the project directory and install dependencies.
    ```bash
-   cd toy-todo-app
-   npm install
+   cd auth-playground
+   bun i
    ```
 
 3. **Set Up Environment Variables**: Set up necessary environment variables for database connection, JWT secret, etc.
