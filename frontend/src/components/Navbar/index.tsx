@@ -12,46 +12,54 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Navbar() {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
-  const items = isAuthenticated
-    ? [
+  const authNavbar = [
+    {
+      key: "tasks",
+      label: <Link to="/tasks">My tasks</Link>,
+      icon: <CheckSquareOutlined />,
+    },
+    {
+      icon: <UserOutlined />,
+      children: [
         {
-          key: "tasks",
-          label: <Link to="/tasks">My tasks</Link>,
-          icon: <CheckSquareOutlined />,
-        },
-        {
+          key: "profile",
+          label: <Link to="profile">Profile</Link>,
           icon: <UserOutlined />,
-          children: [
-            {
-              key: 'profile',
-              label: <Link to='profile'>Profile</Link>,
-              icon: <UserOutlined/>
-            },
-            {
-              key: "logout",
-              label: (
-                <span
-                  onClick={() => {
-                    console.log("Clicked");
-                    navigate("/");
-                    logout();
-                  }}
-                >
-                  Log Out
-                </span>
-              ),
-              icon: <LogoutOutlined />,
-            },
-          ]
-        }
-      ]
-    : [
-        {
-          key: "login",
-          label: <Link to="/login">Log In</Link>,
-          icon: <LoginOutlined />,
         },
-      ];
+        {
+          key: "logout",
+          label: "Log Out",
+          icon: <LogoutOutlined />,
+          onClick: () => {
+            navigate("/");
+            logout();
+          },
+        },
+      ],
+    },
+  ];
+  const guestNavbar = [
+    {
+      key: "login",
+      label: <Link to="/login">Log In</Link>,
+      icon: <LoginOutlined />,
+    },
+  ];
+  const items = isAuthenticated ? authNavbar : guestNavbar;
+
+  // This is a hack to allow to specify the onClick on each menu child
+  const getItem = (items, key) => {
+    // Recursively looks for the first menu item with the given key
+    // Returns the item, or null if not found
+    for (const item of items) {
+      if (item.key === key) return item;
+      if (item.children !== undefined) {
+        let result = getItem(item.children, key);
+        if (result !== null) return result;
+      }
+    }
+    return null;
+  };
 
   return (
     <div className="navbar">
@@ -65,6 +73,7 @@ export default function Navbar() {
         theme="dark"
         mode="horizontal"
         items={items}
+        onClick={({ key }) => getItem(items, key)?.onClick?.()}
         selectedKeys={[]}
         // style={{ flex: 1, minWidth: 0 }}
       />
