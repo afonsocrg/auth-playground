@@ -1,15 +1,20 @@
 import { OpenAPIRouter } from "@cloudflare/itty-router-openapi";
 import { withCookies } from "itty-router";
 import { createCors } from "./utils/cors";
-import { TaskCreate } from "./endpoints/taskCreate";
-import { TaskDelete } from "./endpoints/taskDelete";
-import { TaskFetch } from "./endpoints/taskFetch";
-import { TaskList } from "./endpoints/taskList";
-import { Login } from "endpoints/login";
-import { Logout } from "endpoints/logout";
-import { Register } from "endpoints/register";
-import { Refresh } from "endpoints/refresh";
 import { ACCESS_REFRESH_ENDPOINT, authenticateUser } from "auth";
+import {
+  CreateTodo,
+  ListTodos,
+  GetTodo,
+  EditTodo,
+  CompleteTodo,
+  IncompleteTodo,
+  DeleteTodo,
+  Login,
+  Logout,
+  Register,
+  Refresh,
+} from "./endpoints";
 
 export const router = OpenAPIRouter({
   docs_url: "/docs",
@@ -33,15 +38,17 @@ router.all("*", withCookies);
 router.post("/auth/register", Register);
 router.post("/auth/login", Login);
 router.get(ACCESS_REFRESH_ENDPOINT, Refresh);
+// BELOW THIS LINE ALL ROUTES ARE AUTHENTICATED
 router.all("*", authenticateUser);
-// Logout must be authenticated!!
 router.post("/auth/logout", Logout);
 
-// Authenticated routes
-router.get("/api/tasks/", TaskList);
-router.post("/api/tasks/", TaskCreate);
-router.get("/api/tasks/:taskSlug/", TaskFetch);
-router.delete("/api/tasks/:taskSlug/", TaskDelete);
+router.post("/api/todos/", CreateTodo);
+router.get("/api/todos/", ListTodos);
+router.get("/api/todos/:id/", GetTodo);
+router.delete("/api/todos/:id/", DeleteTodo);
+router.put("/api/todos/:id", EditTodo);
+router.post("/api/todos/:id/done", CompleteTodo);
+router.delete("/api/todos/:id/done", IncompleteTodo);
 
 // 404 for everything else
 router.all("*", () =>

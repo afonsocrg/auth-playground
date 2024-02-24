@@ -2,7 +2,7 @@ import {
   OpenAPIRoute,
   OpenAPIRouteSchema,
 } from "@cloudflare/itty-router-openapi";
-import { RegisterUser } from "../types";
+import { RegisterUser } from "./types";
 import { registerUser } from "services/users";
 import { createSession } from "services/user_sessions";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "auth";

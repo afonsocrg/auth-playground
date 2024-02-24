@@ -7,3 +7,5 @@ export class RegistrationError extends BaseError {
 }
 
 export class UnexpectedError extends BaseError {}
+
+export class NotFoundError extends BaseError {}

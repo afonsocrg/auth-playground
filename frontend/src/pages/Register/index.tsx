@@ -29,7 +29,7 @@ export default function Register() {
         values.password
       );
       login(user);
-      navigate("/tasks");
+      navigate("/todos");
     } catch (error) {
       if (error instanceof RegistrationError) {
         setError(error.message);

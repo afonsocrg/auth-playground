@@ -15,8 +15,8 @@ export default function Navbar() {
   const navigate = useNavigate();
   const authNavbar = [
     {
-      key: "tasks",
-      label: <Link to="/tasks">My tasks</Link>,
+      key: "todos",
+      label: <Link to="/todos">My todos</Link>,
       icon: <CheckSquareOutlined />,
     },
     {

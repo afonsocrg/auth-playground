@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { users, User } from "../db/schema/users";
 import { RegistrationError, UnexpectedError } from "./errors";

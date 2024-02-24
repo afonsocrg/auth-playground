@@ -13,5 +13,6 @@ export const todos = sqliteTable("todos", {
   name: text("name").notNull(),
 });
 
-export type Todo = typeof todos.$inferSelect;
+export type FullTodo = typeof todos.$inferSelect;
+export type Todo = Omit<FullTodo, "userId">;
 export type InsertTodo = typeof todos.$inferInsert;

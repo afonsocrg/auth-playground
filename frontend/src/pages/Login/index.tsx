@@ -24,7 +24,7 @@ export default function Login() {
     try {
       const user = await api.login(values.username, values.password);
       login(user);
-      navigate("/tasks");
+      navigate("/todos");
     } catch (e) {
       if (e instanceof InvalidCredentialsError) {
         setInvalidCredentials(true);

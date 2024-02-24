@@ -38,7 +38,7 @@ export default function Home() {
         <li>
           <Text>
             <strong>To Do Management</strong>: Users can create, delete, and
-            edit their to-do tasks.
+            edit their to-do todos.
           </Text>
         </li>
         <li>

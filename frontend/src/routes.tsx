@@ -6,7 +6,7 @@ import NotFound from "@pages/NotFound";
 import Login from "@pages/Login";
 import Profile from "@pages/Profile";
 import Register from "@pages/Register";
-import Tasks from "@pages/Tasks";
+import Todos from "@pages/Todos";
 import { useAuth } from "@hooks/AuthContext";
 
 // import { useCustomAuth, AuthenticationGuard } from './hooks/useCustomAuth'
@@ -33,7 +33,7 @@ export function AppRoutes() {
           <Route path='*'               element={<NotFound />                   } />
           <Route element={<PrivateRoute/>}>
             <Route path='profile'         element={<Profile/>                       } />
-            <Route path='tasks'         element={<Tasks/>                       } />
+            <Route path='todos'         element={<Todos/>                       } />
           </Route>
         </Route>
       </Routes>
