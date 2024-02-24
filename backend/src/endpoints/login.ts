@@ -5,13 +5,7 @@ import {
 import { SignIn } from "../types";
 import { loginUser } from "services/users";
 import { createSession } from "services/user_sessions";
-import { UserSession } from "../db/schema/user_sessions";
-import {
-  ACCESS_REFRESH_ENDPOINT,
-  ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY,
-} from "auth";
-import { createCookie } from "utils/cookies";
+import { setAccessTokenCookie, setRefreshTokenCookie } from "auth";
 
 // TODO: what to do when the user already has access and refresh tokens and is logging in?
 export class Login extends OpenAPIRoute {
@@ -51,35 +45,19 @@ export class Login extends OpenAPIRoute {
     const password = data.body.password;
     const user = await loginUser(env, username, password);
     if (user !== null) {
-      const session = (await createSession(env, user.id)) as UserSession;
-      const httpOnly = false;
-      const response = Response.json(
-        {
-          success: true,
-          data: user,
-        },
-        {
-          status: 200,
-          headers: {
-            "Set-Cookie": createCookie(ACCESS_TOKEN_KEY, session.accessToken, {
-              path: "/",
-              expires: session.accessExpiration,
-              sameSite: "Lax",
-              httpOnly,
-            }),
-          },
-        }
-      );
-      // Extra Set-Cookie header must be set separately
-      // since objects cannot have duplicate keys
-      response.headers.append(
+      const session = await createSession(env, user.id);
+      const headers = new Headers();
+      headers.append(
         "Set-Cookie",
-        createCookie(REFRESH_TOKEN_KEY, session.refreshToken, {
-          path: ACCESS_REFRESH_ENDPOINT,
-          expires: session.refreshExpiration,
-          sameSite: "Lax",
-          httpOnly,
-        })
+        setAccessTokenCookie(session.accessToken, session.accessExpiration)
+      );
+      headers.append(
+        "Set-Cookie",
+        setRefreshTokenCookie(session.refreshToken, session.refreshExpiration)
+      );
+      const response = Response.json(
+        { success: true, data: user },
+        { status: 200, headers }
       );
       return response;
     } else {

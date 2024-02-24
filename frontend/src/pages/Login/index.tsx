@@ -29,7 +29,7 @@ export default function Login() {
       if (e instanceof InvalidCredentialsError) {
         setInvalidCredentials(true);
       }
-      // pass
+      console.error("Unhandled error", e)
     }
   };
 

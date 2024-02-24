@@ -7,15 +7,20 @@ type FieldType = {
   username?: string;
   email?: string;
   password?: string;
+  confirm?: string;
 };
 
 export default function Register() {
   const navigate = useNavigate();
   const onFinish = async (values: FieldType) => {
     console.log("Success:", values);
-    navigate("/login");
-    const resp = await auth.register(values.email, values.username, values.password);
-    console.log("Got response", resp)
+    const resp = await auth.register(
+      values.email,
+      values.username,
+      values.password
+    );
+    navigate("/tasks");
+    console.log("Got response", resp);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -34,16 +39,19 @@ export default function Register() {
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Email"
-          name="email"
-          rules={[{ required: true, message: "Please input your email!" }]}
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: "Please input your username!" }]}
         >
           <Input />
         </Form.Item>
         <Form.Item<FieldType>
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          label="Email"
+          name="email"
+          rules={[
+            { required: true, message: "Please input your email!" },
+            { type: "email", message: "The input is not valid E-mail!" },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -57,8 +65,19 @@ export default function Register() {
         </Form.Item>
         <Form.Item<FieldType>
           label="Confirm password"
-          name="password"
-          rules={[{ required: true, message: "Please reinsert your password!" }]}
+          name="confirm"
+          dependencies={["password"]}
+          rules={[
+            { required: true, message: "Please reinsert your password!" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("The passwords do not match!"));
+              },
+            }),
+          ]}
         >
           <Input.Password />
         </Form.Item>
