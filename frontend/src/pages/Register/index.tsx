@@ -1,7 +1,12 @@
-import { Link } from "react-router-dom";
-import { Button, Form, Input, Space } from "antd";
-import { useNavigate } from "react-router-dom";
-import * as auth from "@services/api/auth";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Form, Input, Space, Typography } from "antd";
+import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
+const { Text } = Typography;
+
+import * as api from "@services/api";
+import { RegistrationError } from "@services/api/errors";
+import { useAuth } from "@hooks/AuthContext";
 
 type FieldType = {
   username?: string;
@@ -12,15 +17,26 @@ type FieldType = {
 
 export default function Register() {
   const navigate = useNavigate();
+  const { login } = useAuth();
+  const [error, setError] = useState<string>(null);
+
   const onFinish = async (values: FieldType) => {
-    console.log("Success:", values);
-    const resp = await auth.register(
-      values.email,
-      values.username,
-      values.password
-    );
-    navigate("/tasks");
-    console.log("Got response", resp);
+    try {
+      setError(null);
+      const user = await api.register(
+        values.email,
+        values.username,
+        values.password
+      );
+      login(user);
+      navigate("/tasks");
+    } catch (error) {
+      if (error instanceof RegistrationError) {
+        setError(error.message);
+        return;
+      }
+      console.error("Caught error in page", error);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -39,32 +55,37 @@ export default function Register() {
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Username"
           name="username"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
-          <Input />
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Username"
+          />
         </Form.Item>
         <Form.Item<FieldType>
-          label="Email"
           name="email"
           rules={[
             { required: true, message: "Please input your email!" },
             { type: "email", message: "The input is not valid E-mail!" },
           ]}
         >
-          <Input />
+          <Input
+            prefix={<MailOutlined className="site-form-item-icon" />}
+            placeholder="Email"
+          />
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Password"
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input.Password />
+          <Input.Password
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            placeholder="Password"
+          />
         </Form.Item>
         <Form.Item<FieldType>
-          label="Confirm password"
           name="confirm"
           dependencies={["password"]}
           rules={[
@@ -79,8 +100,12 @@ export default function Register() {
             }),
           ]}
         >
-          <Input.Password />
+          <Input.Password
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            placeholder="Confirm Password"
+          />
         </Form.Item>
+        {error && <Text type="danger">{error}</Text>}
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Space>

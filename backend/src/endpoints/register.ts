@@ -6,6 +6,7 @@ import { RegisterUser } from "../types";
 import { registerUser } from "services/users";
 import { createSession } from "services/user_sessions";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "auth";
+import { RegistrationError } from "services/errors";
 
 export class Register extends OpenAPIRoute {
   static schema: OpenAPIRouteSchema = {
@@ -16,7 +17,6 @@ export class Register extends OpenAPIRoute {
       "200": {
         description: "User registered successfully",
         schema: {
-          // TODO: return user
           success: true,
           data: {
             id: 1,
@@ -63,17 +63,19 @@ export class Register extends OpenAPIRoute {
         { status: 200, headers }
       );
     } catch (error) {
-      // Something went wrong
-      // TODO: improve handling
-      return Response.json(
-        {
-          success: false,
-          error: "Username or email already in use",
-        },
-        {
-          status: 400,
-        }
-      );
+      if (error instanceof RegistrationError) {
+        return Response.json(
+          {
+            success: false,
+            error: error.message,
+          },
+          {
+            status: 400,
+          }
+        );
+      }
+
+      throw error;
     }
   }
 }

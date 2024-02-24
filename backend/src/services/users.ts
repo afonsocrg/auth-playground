@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { users, User } from "../db/schema/users";
-import { UnexpectedError } from "./errors";
+import { RegistrationError, UnexpectedError } from "./errors";
 import { checkPassword, hashPassword } from "utils/crypto";
 
 const userSchema = {
@@ -21,18 +21,29 @@ export async function registerUser(
   email: string,
   password: string
 ): Promise<User> {
-  console.log(
-    `Registering user ${username} with email ${email} and password ${password}`
-  );
-
   const passwordHash = hashPassword(password);
   const db = drizzle(env.DB);
-  const results = await db
-    .insert(users)
-    .values({ username, email, passwordHash })
-    .returning(userSchema);
-  const user = results[0];
-  return user;
+  try {
+    const results = await db
+      .insert(users)
+      .values({ username, email, passwordHash })
+      .returning(userSchema);
+    const user = results[0];
+    return user;
+  } catch (error) {
+    if (error instanceof Error) {
+      if (
+        error.message === "D1_ERROR: UNIQUE constraint failed: users.username"
+      ) {
+        throw new RegistrationError("Username already in use!");
+      } else if (
+        error.message === "D1_ERROR: UNIQUE constraint failed: users.email"
+      ) {
+        throw new RegistrationError("Email already in use!");
+      }
+    }
+    throw new UnexpectedError(error.message);
+  }
 }
 
 export async function loginUser(

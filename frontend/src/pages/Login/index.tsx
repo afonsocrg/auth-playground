@@ -2,7 +2,7 @@ import "./styles.css";
 import { useState } from "react";
 import { useAuth } from "@hooks/AuthContext";
 import { Link } from "react-router-dom";
-import { Button, Form, Input, Space, Checkbox, Typography } from "antd";
+import { Button, Form, Input, Checkbox, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import * as api from "@services/api";
 import { InvalidCredentialsError } from "@services/api/errors";

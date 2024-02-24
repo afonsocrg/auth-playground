@@ -1,6 +1,6 @@
 import axios from "axios";
 import { User } from "@services/api";
-import { InvalidCredentialsError, UnhandledError } from "./errors";
+import { InvalidCredentialsError, RegistrationError, UnhandledError } from "./errors";
 
 const BASE_URL = "http://localhost:8787";
 
@@ -8,10 +8,21 @@ export async function register(
   email: string,
   username: string,
   password: string
-) {
+): Promise<User> {
   const data = { email, username, password };
-  const response = await axios.post(`${BASE_URL}/auth/register`, data);
-  console.log(response);
+  try {
+    const response = await axios.post(`${BASE_URL}/auth/register`, data, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    const response = error.response;
+    if (response.status === 400 && response.data?.error) {
+      console.log(response.data.error)
+      throw new RegistrationError(response.data.error)
+    }
+    throw new UnhandledError(error.message)
+  }
 }
 
 export async function login(username: string, password: string): Promise<User> {
@@ -32,8 +43,6 @@ export async function login(username: string, password: string): Promise<User> {
 
 export async function logout() {
   try {
-    console.log("Logging out")
-    console.log("")
     await axios.post(`${BASE_URL}/auth/logout`, null, {
       withCredentials: true,
     });

@@ -9,7 +9,6 @@ function getAlias() {
   for (const path in paths) {
     alias[path.replace('/*', '')] = paths[path][0].replace('/*', '').replace('.', '')
   }
-  console.log(alias)
   return alias
 }
 

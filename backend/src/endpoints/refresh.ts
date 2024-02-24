@@ -27,7 +27,6 @@ export class Refresh extends OpenAPIRoute {
     data: Record<string, any>
   ) {
     const refreshToken = request.cookies?.[REFRESH_TOKEN_KEY];
-    console.log("REFRESHING TOKEN", refreshToken);
     if (!refreshToken) {
       return Response.json(
         {

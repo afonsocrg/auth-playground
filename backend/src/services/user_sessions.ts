@@ -93,7 +93,6 @@ export async function refreshSession(env, refreshToken: string) {
     .from(user_sessions)
     .where(eq(user_sessions.refreshToken, refreshToken));
 
-  console.log(sessions);
   if (sessions.length > 1) {
     // should not happen due to unique constraints
     throw new UnexpectedError(

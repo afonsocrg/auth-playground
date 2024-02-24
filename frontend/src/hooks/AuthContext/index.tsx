@@ -14,7 +14,7 @@ export default function AuthProvider({ children }) {
   const isAuthenticated = user !== null;
 
   const login = (user: User) => {
-    setUser(user);
+    if (user !== null && user !== undefined) setUser(user);
   };
 
   const logout = () => {
