@@ -47,9 +47,7 @@ export async function loginUser(
     .where(eq(users.username, username));
 
   if (result.length > 2) {
-    throw new UnexpectedError(
-      `Get user returned ${result.length} results`
-    );
+    throw new UnexpectedError(`Get user returned ${result.length} results`);
   }
 
   if (result.length === 0) {

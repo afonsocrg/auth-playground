@@ -2,6 +2,7 @@ import "./styles.css";
 import { Menu } from "antd";
 import { HomeOutlined, LoginOutlined } from "@ant-design/icons";
 import { useAuth } from "@hooks/AuthContext";
+import * as api from "@services/api";
 import {
   CheckSquareOutlined,
   LogoutOutlined,
@@ -30,9 +31,10 @@ export default function Navbar() {
           key: "logout",
           label: "Log Out",
           icon: <LogoutOutlined />,
-          onClick: () => {
-            navigate("/");
+          onClick: async () => {
+            await api.logout();
             logout();
+            navigate("/");
           },
         },
       ],
@@ -73,9 +75,7 @@ export default function Navbar() {
         theme="dark"
         mode="horizontal"
         items={items}
-        onClick={({ key }) => getItem(items, key)?.onClick?.()}
         selectedKeys={[]}
-        // style={{ flex: 1, minWidth: 0 }}
       />
     </div>
   );

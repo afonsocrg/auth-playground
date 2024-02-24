@@ -39,7 +39,7 @@ export class Logout extends OpenAPIRoute {
           "Set-Cookie": createCookie(ACCESS_TOKEN_KEY, "", {
             path: "/",
             expires: new Date(),
-            sameSite: "Strict",
+            sameSite: "Lax",
             httpOnly,
           }),
         },
@@ -50,7 +50,7 @@ export class Logout extends OpenAPIRoute {
       createCookie(REFRESH_TOKEN_KEY, "", {
         path: ACCESS_REFRESH_ENDPOINT,
         expires: new Date(),
-        sameSite: "Strict",
+        sameSite: "Lax",
         httpOnly,
       })
     );

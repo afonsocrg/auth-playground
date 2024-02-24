@@ -13,6 +13,7 @@
     "@carbon/icons-react": "^11.34.1",
     "@carbon/react": "^1.48.1",
     "antd": "^5.14.1",
+    "axios": "^1.6.7",
     "bootstrap": "^5.3.2",
     "bootstrap-5-breakpoint-react-hook": "^1.1.0",
     "carbon-components": "^10.58.12",

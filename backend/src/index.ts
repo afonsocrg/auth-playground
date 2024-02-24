@@ -1,5 +1,6 @@
 import { OpenAPIRouter } from "@cloudflare/itty-router-openapi";
-import { createCors, withCookies } from "itty-router";
+import { withCookies } from "itty-router";
+import { createCors } from "./utils/cors";
 import { TaskCreate } from "./endpoints/taskCreate";
 import { TaskDelete } from "./endpoints/taskDelete";
 import { TaskFetch } from "./endpoints/taskFetch";
@@ -13,10 +14,14 @@ import { ACCESS_REFRESH_ENDPOINT, authenticateUser } from "auth";
 export const router = OpenAPIRouter({
   docs_url: "/docs",
 });
+
 const { preflight, corsify } = createCors({
-  // origins: ["http://localhost:5173"],
-  //   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  // headers: "",
+  origins: ["http://localhost:5173"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  // It looks like the methods are not working...
+  headers: {
+    "Access-Control-Allow-Credentials": true,
+  },
 });
 
 // checks preflight
@@ -24,7 +29,6 @@ router.all("*", preflight);
 
 // automatically parses request cookies into request.cookies
 router.all("*", withCookies);
-
 
 router.post("/auth/register", Register);
 router.post("/auth/login", Login);
@@ -52,6 +56,6 @@ router.all("*", () =>
 
 export default {
   fetch: async (request, env, ctx) => {
-    return router.handle(request, env, ctx);
+    return await router.handle(request, env, ctx).then(corsify);
   },
 };

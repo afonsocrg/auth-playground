@@ -13,7 +13,6 @@ import { useAuth } from "@hooks/AuthContext";
 
 function PrivateRoute() {
   const { isAuthenticated } = useAuth();
-  console.log('isAuthenticated', isAuthenticated)
   if (isAuthenticated) {
     return <Outlet />;
   } else {

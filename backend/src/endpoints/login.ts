@@ -24,6 +24,11 @@ export class Login extends OpenAPIRoute {
         description: "User logged in successfully. Sets a session cookie",
         schema: {
           success: true,
+          data: {
+            id: 1,
+            username: "example",
+            email: "example@mail.com",
+          },
         },
       },
       "401": {
@@ -51,6 +56,7 @@ export class Login extends OpenAPIRoute {
       const response = Response.json(
         {
           success: true,
+          data: user,
         },
         {
           status: 200,
@@ -58,7 +64,7 @@ export class Login extends OpenAPIRoute {
             "Set-Cookie": createCookie(ACCESS_TOKEN_KEY, session.accessToken, {
               path: "/",
               expires: session.accessExpiration,
-              sameSite: "Strict",
+              sameSite: "Lax",
               httpOnly,
             }),
           },
@@ -66,14 +72,12 @@ export class Login extends OpenAPIRoute {
       );
       // Extra Set-Cookie header must be set separately
       // since objects cannot have duplicate keys
-      // https://github.com/kwhitley/itty-router/pull/219
-      // This PR solves this issue (not sure yet)
       response.headers.append(
         "Set-Cookie",
         createCookie(REFRESH_TOKEN_KEY, session.refreshToken, {
           path: ACCESS_REFRESH_ENDPOINT,
           expires: session.refreshExpiration,
-          sameSite: "Strict",
+          sameSite: "Lax",
           httpOnly,
         })
       );

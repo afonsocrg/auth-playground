@@ -1,7 +1,13 @@
+import "./styles.css";
+import { useState } from "react";
 import { useAuth } from "@hooks/AuthContext";
 import { Link } from "react-router-dom";
-import { Button, Form, Input, Space } from "antd";
+import { Button, Form, Input, Space, Checkbox, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
+import api from "@services/api";
+import { InvalidCredentialsError } from "@services/api/errors";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+const { Text } = Typography;
 
 type FieldType = {
   username?: string;
@@ -11,10 +17,20 @@ type FieldType = {
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const onFinish = (values: FieldType) => {
-    console.log("Success:", values);
-    login();
-    navigate("/tasks");
+
+  const [invalidCredentials, setInvalidCredentials] = useState(false);
+
+  const onFinish = async (values: FieldType) => {
+    try {
+      const user = await api.login(values.username, values.password);
+      login(user);
+      navigate("/tasks");
+    } catch (e) {
+      if (e instanceof InvalidCredentialsError) {
+        setInvalidCredentials(true);
+      }
+      // pass
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -24,40 +40,55 @@ export default function Login() {
     <>
       <h1>Log in</h1>
       <Form
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
+        name="normal_login"
+        className="login-form"
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
+        wrapperCol={{ span: 8 }}
+        onFieldsChange={() => setInvalidCredentials(false)}
       >
-        <Form.Item<FieldType>
-          label="Username"
+        <Form.Item
           name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          rules={[{ required: true, message: "Please input your Username!" }]}
         >
-          <Input />
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Username"
+          />
         </Form.Item>
-
-        <Form.Item<FieldType>
-          label="Password"
+        <Form.Item
           name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          rules={[{ required: true, message: "Please input your Password!" }]}
         >
-          <Input.Password />
+          <Input.Password
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            placeholder="Password"
+          />
+        </Form.Item>
+        {invalidCredentials && (
+          <Text type="danger">Username or password are incorrect</Text>
+        )}
+        <Form.Item>
+          <Form.Item name="remember" valuePropName="checked" noStyle>
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
+          {/* <a className="login-form-forgot" href=""> */}
+          <Link to="/login" className="login-form-forgot">
+            Forgot password
+          </Link>
+          {/* </a> */}
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Space>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-            <Link to="/register">Don't have an account? Sign up!</Link>
-          </Space>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
+            Log in
+          </Button>
+          Or <Link to="/register">register now!</Link>
         </Form.Item>
       </Form>
-      ;
     </>
   );
 }

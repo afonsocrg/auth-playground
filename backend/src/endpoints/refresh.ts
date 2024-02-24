@@ -56,7 +56,7 @@ export class Refresh extends OpenAPIRoute {
           "Set-Cookie": createCookie(ACCESS_TOKEN_KEY, newSession.accessToken, {
             path: "/",
             expires: newSession.accessExpiration,
-            sameSite: "Strict",
+            sameSite: "Lax",
             httpOnly: false,
           }),
         },
