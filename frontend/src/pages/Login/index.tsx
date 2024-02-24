@@ -4,7 +4,7 @@ import { useAuth } from "@hooks/AuthContext";
 import { Link } from "react-router-dom";
 import { Button, Form, Input, Space, Checkbox, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
-import api from "@services/api";
+import * as api from "@services/api";
 import { InvalidCredentialsError } from "@services/api/errors";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 const { Text } = Typography;

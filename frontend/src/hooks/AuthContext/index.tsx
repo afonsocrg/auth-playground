@@ -1,6 +1,6 @@
 import { useContext, createContext, useState } from "react";
-import { useLocalStorage } from 'usehooks-ts'
-import type { User } from '@services/api'
+import { useLocalStorage } from "usehooks-ts";
+import type { User } from "@services/api";
 
 type AuthProviderType = {
   isAuthenticated: boolean;
@@ -9,8 +9,8 @@ type AuthProviderType = {
 };
 const AuthContext = createContext({} as AuthProviderType);
 
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useLocalStorage<User>('user', null)
+export default function AuthProvider({ children }) {
+  const [user, setUser] = useLocalStorage<User>("user", null);
   const isAuthenticated = user !== null;
 
   const login = (user: User) => {
@@ -26,9 +26,7 @@ const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-export default AuthProvider;
+}
 
 export const useAuth = () => {
   return useContext(AuthContext);
