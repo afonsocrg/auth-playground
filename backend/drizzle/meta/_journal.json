@@ -8,6 +8,13 @@
       "when": 1708350071862,
       "tag": "0000_steady_prowler",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1708799679351,
+      "tag": "0001_talented_gateway",
+      "breakpoints": true
     }
   ]
 }
