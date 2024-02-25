@@ -1,6 +1,6 @@
 import "./styles.css";
 import { Menu } from "antd";
-import { HomeOutlined, LoginOutlined } from "@ant-design/icons";
+import { LoginOutlined } from "@ant-design/icons";
 import { useAuth } from "@hooks/AuthContext";
 import * as api from "@services/api";
 import {
@@ -16,7 +16,7 @@ export default function Navbar() {
   const authNavbar = [
     {
       key: "todos",
-      label: <Link to="/todos">My todos</Link>,
+      label: <Link to="/todos">To-Do List</Link>,
       icon: <CheckSquareOutlined />,
     },
     {

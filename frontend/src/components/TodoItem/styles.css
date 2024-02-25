@@ -1,0 +1,21 @@
+.todo-item {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.todo-item .checkbox {
+  margin: 5px;
+  /* transform: scale(1.75); */
+}
+
+.todo-item .name {
+  margin-left: 15px;
+  font-size: 12pt;
+  flex: 1;
+}
+
+.todo-item .close {
+    cursor: pointer;
+
+}
