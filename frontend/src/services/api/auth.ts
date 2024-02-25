@@ -1,8 +1,7 @@
 import axios from "axios";
 import { User } from "@services/api";
 import { InvalidCredentialsError, RegistrationError, UnhandledError } from "./errors";
-
-const BASE_URL = "http://localhost:8787";
+import { BASE_URL } from "./consts";
 
 export async function register(
   email: string,
@@ -18,7 +17,6 @@ export async function register(
   } catch (error) {
     const response = error.response;
     if (response.status === 400 && response.data?.error) {
-      console.log(response.data.error)
       throw new RegistrationError(response.data.error)
     }
     throw new UnhandledError(error.message)

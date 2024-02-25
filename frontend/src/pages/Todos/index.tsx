@@ -1,54 +1,56 @@
 import { Button, Typography } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { List } from "antd";
 import TodoItem from "@components/TodoItem";
 import { PlusOutlined } from "@ant-design/icons";
 const { Title, Text } = Typography;
-
-const data = [
-  {
-    id: 1,
-    done: false,
-    name: "To-Do #1",
-  },
-  {
-    id: 2,
-    done: true,
-    name: "To-Do #2",
-  },
-  {
-    id: 3,
-    done: false,
-    name: "To-Do #3",
-  },
-  {
-    id: 4,
-    done: false,
-    name: "To-Do #4",
-  },
-];
+import * as api from "@services/api";
 
 export default function Todos() {
-  const [todos, setTodos] = useState(data);
+  const [todos, setTodos] = useState([]);
   const [addingNew, setAddingNew] = useState(true);
-  const updateTodo = (newTodo) =>
-    setTodos((prev) =>
-      prev.map((item) => (item.id === newTodo.id ? newTodo : item))
-    );
 
-  const addTodo = (name) => {
-    if (name === "") return;
-    const maxId = todos.reduce(
-      (prev, current) => (prev.id < current.id ? current : prev),
-      { id: 0 }
-    ).id;
-    setTodos((prev) => [{ id: maxId + 1, name, done: false }, ...prev]);
+  useEffect(() => {
+    api.getTodos().then((todos) => {
+      setTodos(todos);
+    });
+  }, []);
+
+  const addTodo = async (name: string) => {
+    if (name === "") {
+      setAddingNew(false);
+      return;
+    }
+    const todo = await api.addTodo(name);
+    setTodos((prev) => [...prev, todo]);
     setAddingNew(false);
   };
 
-  const removeTodo = (id) => {
-    
+  const updateTodo = async (id: number, newName: string) => {
+    const newTodo = await api.changeTodo(id, newName);
+    setTodos((prev) =>
+      prev.map((item) => (item.id === newTodo.id ? newTodo : item))
+    );
   };
+
+  const completeTodo = async (id: number) => {
+    const newTodo = await api.completeTodo(id);
+    setTodos((prev) =>
+      prev.map((item) => (item.id === newTodo.id ? newTodo : item))
+    );
+  };
+  const incompleteTodo = async (id: number) => {
+    const newTodo = await api.incompleteTodo(id);
+    setTodos((prev) =>
+      prev.map((item) => (item.id === newTodo.id ? newTodo : item))
+    );
+  };
+
+  const removeTodo = async (id: number) => {
+    await api.removeTodo(id);
+    setTodos((prev) => prev.filter((item) => item.id !== id));
+  };
+
   return (
     <>
       <Title>To-Do list</Title>
@@ -72,8 +74,10 @@ export default function Todos() {
           <List.Item>
             <TodoItem
               todo={item}
-              onChange={updateTodo}
-              onRemove={() => setTodos((prev) => prev.filter((i) => i.id !== item.id))}
+              onChange={(newName: string) => updateTodo(item.id, newName)}
+              onComplete={() => completeTodo(item.id)}
+              onIncomplete={() => incompleteTodo(item.id)}
+              onRemove={() => removeTodo(item.id)}
             />
             {/* <List.Item.Meta
               avatar={

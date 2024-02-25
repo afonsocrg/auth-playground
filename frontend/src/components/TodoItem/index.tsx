@@ -11,18 +11,26 @@ type Todo = {
 };
 type Props = {
   todo: Todo;
-  onChange: (todo: Todo) => void;
+  onChange: (newName: string) => void;
+  onComplete: () => void;
+  onIncomplete: () => void;
   onRemove: () => void;
 };
-export default function TodoItem({ todo, onChange, onRemove }: Props) {
+export default function TodoItem({
+  todo,
+  onChange,
+  onComplete,
+  onIncomplete,
+  onRemove,
+}: Props) {
   const { name, done } = todo;
 
   const onChangeDone = (e) => {
     const done = e.target.checked;
-    onChange({ ...todo, done });
+    done ? onComplete() : onIncomplete();
   };
   const onChangeName = (value) => {
-    onChange({ ...todo, name: value });
+    onChange(value);
   };
   return (
     <div className="todo-item">
