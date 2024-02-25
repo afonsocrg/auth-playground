@@ -21,5 +21,13 @@
 .footer {
   text-align: center;
   color: black;
-  /* background-color: #4096ff; */
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.footer .github-logo svg {
+  color: #555555;
+  font-size: 24pt;
 }

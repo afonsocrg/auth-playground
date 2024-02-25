@@ -1,6 +1,7 @@
 import "./styles.css";
-
+import { Link } from "react-router-dom";
 import { Layout, theme } from "antd";
+import { GithubOutlined } from "@ant-design/icons";
 const { Header, Footer, Content } = Layout;
 
 export default function MyLayout({ navBar, content }) {
@@ -22,7 +23,18 @@ export default function MyLayout({ navBar, content }) {
           {content}
         </div>
       </Content>
-      <Footer className="footer">afonsocrg ©{new Date().getFullYear()}</Footer>
+      <Footer className="footer">
+        <div></div>
+        <div>©{new Date().getFullYear()} afonsocrg</div>
+        <div className="github-logo">
+          <Link
+            to="https://github.com/afonsocrg/auth-playground/"
+            target="_blank"
+          >
+            <GithubOutlined />
+          </Link>
+        </div>
+      </Footer>
     </Layout>
   );
 }
