@@ -8,7 +8,7 @@ import TodoItem from "@components/TodoItem";
 const { Title, Text } = Typography;
 
 export default function Todos() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<api.Todo[]>([]);
   const [addingNew, setAddingNew] = useState(false);
 
   const { fetch } = api.useApi();
@@ -27,33 +27,33 @@ export default function Todos() {
       setAddingNew(false);
       return;
     }
-    const todo = await fetch(async () => await api.addTodo(name));
+    const todo = await fetch(() => api.addTodo(name));
     setTodos((prev) => [...prev, todo]);
     setAddingNew(false);
   };
 
   const updateTodo = async (id: number, newName: string) => {
-    const newTodo = await fetch(async () => await api.changeTodo(id, newName));
+    const newTodo = await fetch(() => api.changeTodo(id, newName));
     setTodos((prev) =>
       prev.map((item) => (item.id === newTodo.id ? newTodo : item))
     );
   };
 
   const completeTodo = async (id: number) => {
-    const newTodo = await fetch(async () => await api.completeTodo(id));
+    const newTodo = await fetch(() => api.completeTodo(id));
     setTodos((prev) =>
       prev.map((item) => (item.id === newTodo.id ? newTodo : item))
     );
   };
   const incompleteTodo = async (id: number) => {
-    const newTodo = await fetch(async () => await api.incompleteTodo(id));
+    const newTodo = await fetch(() => api.incompleteTodo(id));
     setTodos((prev) =>
       prev.map((item) => (item.id === newTodo.id ? newTodo : item))
     );
   };
 
   const removeTodo = async (id: number) => {
-    await fetch(async () => await api.removeTodo(id));
+    await fetch(() => api.removeTodo(id));
     setTodos((prev) => prev.filter((item) => item.id !== id));
   };
 

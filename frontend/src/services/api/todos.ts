@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Todo } from "./types";
 import { BASE_URL } from "./consts";
 
-export async function addTodo(name: string) {
+export async function addTodo(name: string): Promise<Todo> {
   const response = await axios.post(
     `${BASE_URL}/api/todos`,
     { name },
@@ -20,11 +20,11 @@ export async function getTodos(): Promise<Todo[]> {
   return response.data.todos;
 }
 
-export async function removeTodo(id: number) {
+export async function removeTodo(id: number): Promise<void> {
   const response = await axios.delete(`${BASE_URL}/api/todos/${id}`, {
     withCredentials: true,
   });
-  return response;
+  return;
 }
 
 export async function changeTodo(id: number, newName: string) {
