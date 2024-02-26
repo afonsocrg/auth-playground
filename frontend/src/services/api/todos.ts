@@ -1,27 +1,22 @@
 import axios from "axios";
 import type { Todo } from "./types";
 import { BASE_URL } from "./consts";
-import { requestWrapper } from "./utils";
 
 export async function addTodo(name: string) {
-  const response = await requestWrapper(async () =>
-    axios.post(
-      `${BASE_URL}/api/todos`,
-      { name },
-      {
-        withCredentials: true,
-      }
-    )
+  const response = await axios.post(
+    `${BASE_URL}/api/todos`,
+    { name },
+    {
+      withCredentials: true,
+    }
   );
   return response.data.result.todo;
 }
 
 export async function getTodos(): Promise<Todo[]> {
-  const response = await requestWrapper(() =>
-    axios.get(`${BASE_URL}/api/todos`, {
-      withCredentials: true,
-    })
-  );
+  const response = await axios.get(`${BASE_URL}/api/todos`, {
+    withCredentials: true,
+  });
   return response.data.todos;
 }
 

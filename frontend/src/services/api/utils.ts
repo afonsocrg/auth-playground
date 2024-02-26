@@ -1,27 +1,40 @@
+import { useNavigate } from "react-router-dom";
 import { refreshToken } from "./auth";
+import { AuthenticationError } from "./errors";
 
 export type Options = {
   refresh?: boolean;
 };
-export async function requestWrapper(
-  fn: () => Promise<Response>,
+export async function refreshWrapper<ReturnType>(
+  fn: () => Promise<ReturnType>,
   { refresh = true }: Options = {}
 ) {
   try {
-    console.log("Wrapping fn call");
-    const response = await fn();
-    console.log("Got success response");
-    return response;
+    return await fn();
   } catch (error) {
-    const response = error.response;
-    console.log("Got error");
-    console.log(response);
-    if (response.status === 401 && refresh) {
-      console.log("Refreshing token");
+    if (refresh && error.response.status === 401) {
       await refreshToken();
-      console.log("Refreshing token");
-      return await requestWrapper(fn, { refresh: false });
+      return await fn();
     }
     throw error;
   }
+}
+
+export function useApi() {
+  const navigate = useNavigate();
+
+  async function fetch<ReturnType>(fn: () => Promise<ReturnType>) {
+    try {
+      const response = await refreshWrapper<ReturnType>(fn);
+      return response;
+    } catch (error) {
+      if (error instanceof AuthenticationError) {
+        navigate("/login");
+        return;
+      }
+      throw error;
+    }
+  }
+
+  return { fetch };
 }

@@ -1,21 +1,25 @@
-import { Button, Typography } from "antd";
 import { useState, useEffect } from "react";
-import { List } from "antd";
-import TodoItem from "@components/TodoItem";
+import { useNavigate } from "react-router-dom";
+import { Button, Typography, List } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-const { Title, Text } = Typography;
+
 import * as api from "@services/api";
+import TodoItem from "@components/TodoItem";
+
+const { Title, Text } = Typography;
 
 export default function Todos() {
   const [todos, setTodos] = useState([]);
   const [addingNew, setAddingNew] = useState(false);
+
+  const { fetch } = api.useApi();
 
   useEffect(() => {
     getTodos();
   }, []);
 
   const getTodos = async () => {
-    const todos = await api.getTodos();
+    const todos = await fetch(api.getTodos);
     setTodos(todos);
   };
 
@@ -24,33 +28,33 @@ export default function Todos() {
       setAddingNew(false);
       return;
     }
-    const todo = await api.addTodo(name);
+    const todo = await fetch(async () => await api.addTodo(name));
     setTodos((prev) => [...prev, todo]);
     setAddingNew(false);
   };
 
   const updateTodo = async (id: number, newName: string) => {
-    const newTodo = await api.changeTodo(id, newName);
+    const newTodo = await fetch(async () => await api.changeTodo(id, newName));
     setTodos((prev) =>
       prev.map((item) => (item.id === newTodo.id ? newTodo : item))
     );
   };
 
   const completeTodo = async (id: number) => {
-    const newTodo = await api.completeTodo(id);
+    const newTodo = await fetch(async () => await api.completeTodo(id));
     setTodos((prev) =>
       prev.map((item) => (item.id === newTodo.id ? newTodo : item))
     );
   };
   const incompleteTodo = async (id: number) => {
-    const newTodo = await api.incompleteTodo(id);
+    const newTodo = await fetch(async () => await api.incompleteTodo(id));
     setTodos((prev) =>
       prev.map((item) => (item.id === newTodo.id ? newTodo : item))
     );
   };
 
   const removeTodo = async (id: number) => {
-    await api.removeTodo(id);
+    await fetch(async () => await api.removeTodo(id));
     setTodos((prev) => prev.filter((item) => item.id !== id));
   };
 
