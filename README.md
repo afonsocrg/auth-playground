@@ -3,11 +3,8 @@
 This Toy To Do app serves as a proof of concept for exploring various aspects of user authentication and account management. The primary goal of this project is to provide a playground environment where developers can experiment with different authentication flows, token management strategies, and user account functionalities.
 
 ## TODO
-
- - User Registration
- - Task management (list, create, edit, delete)
  - validate username and email when registering
- - Home page should display README
+ - Cannot log in if user already logged in
  - Clear login fields when invalid credentials
 
 ## Features
