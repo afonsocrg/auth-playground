@@ -8,7 +8,7 @@ import * as api from "@services/api";
 
 export default function Todos() {
   const [todos, setTodos] = useState([]);
-  const [addingNew, setAddingNew] = useState(true);
+  const [addingNew, setAddingNew] = useState(false);
 
   useEffect(() => {
     api.getTodos().then((todos) => {
