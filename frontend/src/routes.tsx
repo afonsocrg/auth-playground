@@ -32,7 +32,7 @@ export function AppRoutes() {
           <Route path='register'        element={<Register/>                    } />
           <Route path='*'               element={<NotFound />                   } />
           <Route element={<PrivateRoute/>}>
-            <Route path='profile'         element={<Profile/>                       } />
+            <Route path='profile'         element={<Profile/>                   } />
             <Route path='todos'         element={<Todos/>                       } />
           </Route>
         </Route>

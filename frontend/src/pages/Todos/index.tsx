@@ -1,6 +1,7 @@
+import "./styles.css";
 import { useState, useEffect } from "react";
 import { Button, Typography, List } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, ReloadOutlined } from "@ant-design/icons";
 
 import * as api from "@services/api";
 import TodoItem from "@components/TodoItem";
@@ -60,32 +61,39 @@ export default function Todos() {
   return (
     <>
       <Title>To-Do list</Title>
-      {addingNew ? (
+      <div>
+        <Button icon={<PlusOutlined />} onClick={() => setAddingNew(true)}>
+          Add To-Do
+        </Button>
+
+        <Button icon={<ReloadOutlined />} onClick={getTodos}>
+          Refresh
+        </Button>
+      </div>
+      {addingNew && (
         <Text
+          autoFocus
           editable={{
             editing: true,
             onChange: addTodo,
             onCancel: () => setAddingNew(false),
           }}
         />
-      ) : (
-        <Button icon={<PlusOutlined />} onClick={() => setAddingNew(true)}>
-          Add To-Do
-        </Button>
       )}
       <List
-        pagination={{ position: "bottom", align: "center" }}
+        // pagination={{ position: "bottom", align: "center" }}
         dataSource={todos}
         renderItem={(item) => (
-          <List.Item>
-            <TodoItem
-              todo={item}
-              onChange={(newName: string) => updateTodo(item.id, newName)}
-              onComplete={() => completeTodo(item.id)}
-              onIncomplete={() => incompleteTodo(item.id)}
-              onRemove={() => removeTodo(item.id)}
-            />
-            {/* <List.Item.Meta
+          <div className="list-item">
+            <List.Item>
+              <TodoItem
+                todo={item}
+                onChange={(newName: string) => updateTodo(item.id, newName)}
+                onComplete={() => completeTodo(item.id)}
+                onIncomplete={() => incompleteTodo(item.id)}
+                onRemove={() => removeTodo(item.id)}
+              />
+              {/* <List.Item.Meta
               avatar={
                 <Avatar
                   src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
@@ -94,7 +102,8 @@ export default function Todos() {
               title={<a href="https://ant.design">{item.title}</a>}
               description="Ant Design, a design language for background applications, is refined by Ant UED Team"
             /> */}
-          </List.Item>
+            </List.Item>
+          </div>
         )}
       />
     </>
