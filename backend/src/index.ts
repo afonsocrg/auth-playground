@@ -14,6 +14,7 @@ import {
   Logout,
   Register,
   Refresh,
+  GetProfile,
 } from "./endpoints";
 
 export const router = OpenAPIRouter({
@@ -49,6 +50,8 @@ router.delete("/api/todos/:id/", DeleteTodo);
 router.put("/api/todos/:id", EditTodo);
 router.post("/api/todos/:id/done", CompleteTodo);
 router.delete("/api/todos/:id/done", IncompleteTodo);
+
+router.get("/api/profile", GetProfile);
 
 // 404 for everything else
 router.all("*", () =>
