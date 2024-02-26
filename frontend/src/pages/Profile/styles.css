@@ -11,6 +11,10 @@
   justify-content: center;
 }
 
+.profile .avatar {
+  padding: 10px;
+}
+
 .profile .username {
   font-weight: bold;
   color: #444444;
