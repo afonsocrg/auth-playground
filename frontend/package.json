@@ -38,6 +38,7 @@
     "remark-gfm": "^4.0.0",
     "sass": "^1.70.0",
     "sonner": "^1.4.0",
+    "swagger-ui-react": "^5.11.8",
     "tsconfig-paths": "^4.2.0",
     "usehooks-ts": "^2.15.1"
   },
