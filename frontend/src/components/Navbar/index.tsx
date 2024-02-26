@@ -1,6 +1,6 @@
 import "./styles.css";
 import { Menu } from "antd";
-import { LoginOutlined } from "@ant-design/icons";
+import { FileOutlined, LoginOutlined } from "@ant-design/icons";
 import { useAuth } from "@hooks/AuthContext";
 import * as api from "@services/api";
 import {
@@ -13,6 +13,14 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Navbar() {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+
+  const commonNavbar = [
+    {
+      key: "docs",
+      label: <Link to="/docs">API Docs</Link>,
+      icon: <FileOutlined />,
+    },
+  ];
   const authNavbar = [
     {
       key: "todos",
@@ -47,7 +55,10 @@ export default function Navbar() {
       icon: <LoginOutlined />,
     },
   ];
-  const items = isAuthenticated ? authNavbar : guestNavbar;
+  const items = [
+    ...commonNavbar,
+    ...(isAuthenticated ? authNavbar : guestNavbar),
+  ];
 
   // This is a hack to allow to specify the onClick on each menu child
   const getItem = (items, key) => {

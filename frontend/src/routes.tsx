@@ -7,6 +7,7 @@ import Login from "@pages/Login";
 import Profile from "@pages/Profile";
 import Register from "@pages/Register";
 import Todos from "@pages/Todos";
+import ApiDocs from "@pages/ApiDocs";
 import { useAuth } from "@hooks/AuthContext";
 
 // import { useCustomAuth, AuthenticationGuard } from './hooks/useCustomAuth'
@@ -28,6 +29,7 @@ export function AppRoutes() {
       <Routes>
         <Route path='/'>
           <Route index                  element={<Home/>                        } />
+          <Route path='docs'            element={<ApiDocs/>                     } />
           <Route path='login'           element={<Login/>                       } />
           <Route path='register'        element={<Register/>                    } />
           <Route path='*'               element={<NotFound />                   } />
