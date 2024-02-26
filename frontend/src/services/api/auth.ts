@@ -1,6 +1,11 @@
 import axios from "axios";
 import { User } from "@services/api";
-import { InvalidCredentialsError, RegistrationError, UnhandledError } from "./errors";
+import {
+  AuthenticationError,
+  InvalidCredentialsError,
+  RegistrationError,
+  UnhandledError,
+} from "./errors";
 import { BASE_URL } from "./consts";
 
 export async function register(
@@ -17,9 +22,9 @@ export async function register(
   } catch (error) {
     const response = error.response;
     if (response.status === 400 && response.data?.error) {
-      throw new RegistrationError(response.data.error)
+      throw new RegistrationError(response.data.error);
     }
-    throw new UnhandledError(error.message)
+    throw new UnhandledError(error.message);
   }
 }
 
@@ -46,5 +51,20 @@ export async function logout() {
     });
   } catch (error) {
     throw new UnhandledError();
+  }
+}
+
+export async function refreshToken() {
+  try {
+    const response = await axios.get(`${BASE_URL}/auth/refresh`, {
+      withCredentials: true,
+    });
+    return response;
+  } catch (error) {
+    const response = error.response;
+    if (response.status === 401) {
+      throw new AuthenticationError();
+    }
+    throw error;
   }
 }

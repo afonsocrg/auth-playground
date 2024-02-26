@@ -5,3 +5,5 @@ export class InvalidCredentialsError extends ApiError {}
 export class UnhandledError extends ApiError {}
 
 export class RegistrationError extends ApiError {}
+
+export class AuthenticationError extends ApiError {}

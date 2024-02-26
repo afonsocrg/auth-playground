@@ -11,10 +11,13 @@ export default function Todos() {
   const [addingNew, setAddingNew] = useState(false);
 
   useEffect(() => {
-    api.getTodos().then((todos) => {
-      setTodos(todos);
-    });
+    getTodos();
   }, []);
+
+  const getTodos = async () => {
+    const todos = await api.getTodos();
+    setTodos(todos);
+  };
 
   const addTodo = async (name: string) => {
     if (name === "") {
