@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, createSearchParams } from "react-router-dom";
 import { refreshToken } from "./auth";
 import { AuthenticationError } from "./errors";
 import { useAuth } from "@hooks/AuthContext";
+import { getUrlFromLocation } from "@utils/urls";
 
 export type Options = {
   refresh?: boolean;
@@ -24,6 +25,7 @@ export async function refreshWrapper<ReturnType>(
 export function useApi() {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const location = useLocation();
 
   /**
    * Fetches data from the API, handling access token refreshing and error handling.
@@ -45,7 +47,12 @@ export function useApi() {
     } catch (error) {
       if (error instanceof AuthenticationError) {
         logout();
-        navigate("/login");
+        navigate({
+          pathname: "/login",
+          search: createSearchParams({
+            redirect: getUrlFromLocation(location),
+          }).toString(),
+        });
         return;
       }
       throw error;

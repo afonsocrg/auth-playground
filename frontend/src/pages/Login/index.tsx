@@ -1,12 +1,13 @@
 import "./styles.css";
 import { useState } from "react";
-import { useAuth } from "@hooks/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { Button, Form, Input, Checkbox, Typography } from "antd";
-import { useNavigate } from "react-router-dom";
-import * as api from "@services/api";
-import { InvalidCredentialsError } from "@services/api/errors";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+
+import * as api from "@services/api";
+import { useAuth } from "@hooks/AuthContext";
+import { InvalidCredentialsError } from "@services/api/errors";
+
 const { Text } = Typography;
 
 type FieldType = {
@@ -20,22 +21,23 @@ export default function Login() {
 
   const [invalidCredentials, setInvalidCredentials] = useState(false);
 
+  const [searchParams, _] = useSearchParams();
+  const redirectPath = searchParams.get("redirect") || "/todos";
+
   const onFinish = async (values: FieldType) => {
     try {
       const user = await api.login(values.username, values.password);
       login(user);
-      navigate("/todos");
-    } catch (e) {
-      if (e instanceof InvalidCredentialsError) {
+      navigate(redirectPath);
+    } catch (error) {
+      if (error instanceof InvalidCredentialsError) {
         setInvalidCredentials(true);
       }
-      console.error("Unhandled error", e)
+      console.error("Unhandled error", error);
+      throw error;
     }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
   return (
     <>
       <h1>Log in</h1>
