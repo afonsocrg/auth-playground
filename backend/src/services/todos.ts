@@ -19,7 +19,6 @@ export async function createTodo(
     .insert(todos)
     .values({ userId, name })
     .returning(todoSchema);
-  console.log(results);
   if (results.length !== 1) {
     throw new UnexpectedError(
       `Result has ${results.length} when creating a To-Do`
@@ -35,7 +34,6 @@ export async function searchTodos(env, userId: number): Promise<Todo[]> {
     .from(todos)
     .where(eq(todos.userId, userId));
 
-  console.log(results);
   return results;
 }
 

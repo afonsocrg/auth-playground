@@ -46,7 +46,6 @@ export default class ListTodos extends OpenAPIRoute {
   ) {
     const user = context.user;
     const todos = await searchTodos(env, user.id);
-    console.log("Returnigng", todos)
     return { success: true, todos };
   }
 }
