@@ -5,14 +5,18 @@ import * as api from "@services/api";
 import Loading from "@components/Loading";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@hooks/AuthContext";
+import ConfirmationModal from "@components/ConfirmationModal";
 
 const { Title, Text } = Typography;
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { fetch } = api.useApi();
+
   useEffect(() => {
     getProfile();
   }, []);
@@ -26,6 +30,11 @@ export default function Profile() {
     await fetch(api.deleteProfile);
     logout();
     navigate("/");
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+    deleteProfile();
   };
 
   return profile ? (
@@ -43,9 +52,17 @@ export default function Profile() {
         </div>
         <div className="email">{profile.email}</div>
       </div>
-      <Button danger onClick={deleteProfile}>
+      <Button danger onClick={() => setIsModalOpen(true)}>
         Delete Profile
       </Button>
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        title="Are you sure you want to delete your profile?"
+        message={"All your data and To-Dos will be lost"}
+        handleOk={handleOk}
+        closeModal={() => setIsModalOpen(false)}
+        confirmationInput={profile.email}
+      />
     </div>
   ) : (
     <Loading />
