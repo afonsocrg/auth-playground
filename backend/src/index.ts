@@ -15,6 +15,7 @@ import {
   Register,
   Refresh,
   GetProfile,
+  EditProfile,
   DeleteProfile,
 } from "./endpoints";
 
@@ -53,6 +54,7 @@ router.post("/api/todos/:id/done", CompleteTodo);
 router.delete("/api/todos/:id/done", IncompleteTodo);
 
 router.get("/api/profile", GetProfile);
+router.put("/api/profile", EditProfile);
 router.delete("/api/profile", DeleteProfile);
 
 // 404 for everything else

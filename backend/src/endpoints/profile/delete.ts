@@ -2,7 +2,6 @@ import {
   OpenAPIRoute,
   OpenAPIRouteSchema,
 } from "@cloudflare/itty-router-openapi";
-import { BaseError } from "services/errors";
 import { deleteUser } from "services/users";
 
 export default class DeleteProfile extends OpenAPIRoute {

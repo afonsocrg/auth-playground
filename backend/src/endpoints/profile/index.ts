@@ -1,4 +1,5 @@
 import GetProfile from "./get";
+import EditProfile from "./edit";
 import DeleteProfile from "./delete";
 
-export { GetProfile, DeleteProfile };
+export { GetProfile, EditProfile, DeleteProfile };

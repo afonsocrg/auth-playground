@@ -87,3 +87,26 @@ export async function deleteUser(env, id: number): Promise<User> {
   const user = result[0];
   return user;
 }
+
+export async function editUser(
+  env,
+  id: number,
+  {
+    username,
+    email,
+    passwordHash,
+  }: { username?: string; email?: string; passwordHash?: string }
+): Promise<User> {
+  const result = await drizzle(env.DB)
+    .update(users)
+    .set({ username, email, passwordHash })
+    .where(eq(users.id, id))
+    .returning(userSchema);
+  if (result.length > 1) {
+    throw new UnexpectedError(`Update returned ${result.length} rows`);
+  }
+  if (result.length === 0) {
+    throw new NotFoundError(`To-Do #${id} not found`);
+  }
+  return result[0];
+}
