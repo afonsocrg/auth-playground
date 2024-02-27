@@ -5,6 +5,7 @@ import {
 } from "@cloudflare/itty-router-openapi";
 import { editUser } from "services/users";
 import { User } from "./types";
+import { DataError } from "services/errors";
 
 export default class EditProfile extends OpenAPIRoute {
   static schema: OpenAPIRouteSchema = {
@@ -23,6 +24,13 @@ export default class EditProfile extends OpenAPIRoute {
           result: {
             user: User,
           },
+        },
+      },
+      "400": {
+        description: "The given username or email had an invalid format",
+        schema: {
+          success: false,
+          error: "The error message",
         },
       },
     },
@@ -44,6 +52,15 @@ export default class EditProfile extends OpenAPIRoute {
         result: { user },
       });
     } catch (error) {
+      if (error instanceof DataError) {
+        return Response.json(
+          {
+            sucess: false,
+            error: error.message,
+          },
+          { status: 400 }
+        );
+      }
       return Response.json(
         { success: false, error: error.message },
         { status: 500 }

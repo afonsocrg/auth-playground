@@ -1,7 +1,13 @@
 import { eq } from "drizzle-orm";
+import validator from "validator";
 import { drizzle } from "drizzle-orm/d1";
 import { users, User } from "../db/schema/users";
-import { NotFoundError, RegistrationError, UnexpectedError } from "./errors";
+import {
+  DataError,
+  NotFoundError,
+  RegistrationError,
+  UnexpectedError,
+} from "./errors";
 import { checkPassword, hashPassword } from "utils/crypto";
 
 const userSchema = {
@@ -14,6 +20,29 @@ const fullUserSchema = {
   ...userSchema,
   passwordHash: users.passwordHash,
 };
+
+export function isUsernameValid(username: string): boolean {
+  return /^[a-zA-Z0-9_-]{1,32}$/.test(username);
+}
+
+export function validateUsername(username) {
+  if (!isUsernameValid(username)) {
+    throw new DataError(
+      "The username should only contain alphanumeric characters, " +
+        "hyphens, and underscores, and must be at most 32 characters long."
+    );
+  }
+}
+
+export function isEmailValid(email: string): boolean {
+  return validator.isEmail(email);
+}
+
+export function validateEmail(email: string) {
+  if (!isEmailValid(email)) {
+    throw new DataError("The email must have a valid format");
+  }
+}
 
 export async function registerUser(
   env,
@@ -46,6 +75,23 @@ export async function registerUser(
   }
 }
 
+export async function getUser(env, id: number): Promise<User> {
+  const result = await drizzle(env.DB)
+    .select(userSchema)
+    .from(users)
+    .where(eq(users.id, id));
+
+  if (result.length > 2) {
+    throw new UnexpectedError(`Get user returned ${result.length} results`);
+  }
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  return result[0];
+}
+
 export async function loginUser(
   env,
   username: string,
@@ -73,6 +119,34 @@ export async function loginUser(
   return user;
 }
 
+export async function editUser(
+  env,
+  id: number,
+  { username, email }: { username?: string; email?: string }
+): Promise<User> {
+  if (!username && !email) {
+    return getUser(env, id);
+  }
+  if (username !== undefined) {
+    validateUsername(username);
+  }
+  if (email !== undefined) {
+    validateEmail(email);
+  }
+  const result = await drizzle(env.DB)
+    .update(users)
+    .set({ username, email })
+    .where(eq(users.id, id))
+    .returning(userSchema);
+  if (result.length > 1) {
+    throw new UnexpectedError(`Update returned ${result.length} rows`);
+  }
+  if (result.length === 0) {
+    throw new NotFoundError(`To-Do #${id} not found`);
+  }
+  return result[0];
+}
+
 export async function deleteUser(env, id: number): Promise<User> {
   const result = await drizzle(env.DB)
     .delete(users)
@@ -86,27 +160,4 @@ export async function deleteUser(env, id: number): Promise<User> {
   }
   const user = result[0];
   return user;
-}
-
-export async function editUser(
-  env,
-  id: number,
-  {
-    username,
-    email,
-    passwordHash,
-  }: { username?: string; email?: string; passwordHash?: string }
-): Promise<User> {
-  const result = await drizzle(env.DB)
-    .update(users)
-    .set({ username, email, passwordHash })
-    .where(eq(users.id, id))
-    .returning(userSchema);
-  if (result.length > 1) {
-    throw new UnexpectedError(`Update returned ${result.length} rows`);
-  }
-  if (result.length === 0) {
-    throw new NotFoundError(`To-Do #${id} not found`);
-  }
-  return result[0];
 }

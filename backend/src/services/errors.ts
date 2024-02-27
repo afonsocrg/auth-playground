@@ -1,10 +1,8 @@
 export class BaseError extends Error {}
 
-export class RegistrationError extends BaseError {
-  constructor(message) {
-    super(message);
-  }
-}
+export class RegistrationError extends BaseError {}
+
+export class DataError extends BaseError {}
 
 export class UnexpectedError extends BaseError {}
 
