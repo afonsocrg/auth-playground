@@ -1,3 +1,4 @@
+import "./styles.css";
 import { Modal, Input, Button, Typography } from "antd";
 import { useState } from "react";
 
@@ -47,7 +48,7 @@ export default function ConfirmationModal({
       open={isOpen}
       onOk={handleConfirm}
       onCancel={handleCancel}
-      //   okButtonProps={{ danger: true, disabled: input !== confirmationInput }}
+      className="confirm-modal"
       footer={
         <>
           <Button key="back" onClick={handleCancel}>
@@ -64,7 +65,8 @@ export default function ConfirmationModal({
         </>
       }
     >
-      {message}
+      <div className="message">{message}</div>
+
       <div>
         Please type <strong>{confirmationInput}</strong> to confirm:
       </div>
@@ -72,6 +74,7 @@ export default function ConfirmationModal({
         value={input}
         onChange={(e) => handleInputChange(e.target.value)}
         onPressEnter={handleConfirm}
+        className="input"
       ></Input>
       {showError && <Text type="danger">The input does not match!!</Text>}
     </Modal>
