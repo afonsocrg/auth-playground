@@ -7,3 +7,10 @@ export async function getProfile() {
   });
   return response.data.result.user;
 }
+
+export async function deleteProfile() {
+  const response = await axios.delete(`${BASE_URL}/api/profile`, {
+    withCredentials: true,
+  });
+  return;
+}
