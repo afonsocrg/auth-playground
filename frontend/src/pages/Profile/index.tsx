@@ -1,13 +1,13 @@
 import "./styles.css";
 import { useEffect, useState } from "react";
-import { Avatar, Button, Spin, Typography } from "antd";
+import { Avatar, Button, Typography } from "antd";
 import * as api from "@services/api";
 import Loading from "@components/Loading";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@hooks/AuthContext";
 import ConfirmationModal from "@components/ConfirmationModal";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export default function Profile() {
   const [profile, setProfile] = useState<api.Profile>(null);
@@ -38,7 +38,7 @@ export default function Profile() {
   };
 
   const updateProfile = async (payload) => {
-    const newProfile = await api.editProfile(payload);
+    const newProfile = await fetch(() => api.editProfile(payload));
     login(newProfile);
     setProfile(newProfile);
   };

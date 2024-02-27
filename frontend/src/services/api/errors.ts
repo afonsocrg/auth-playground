@@ -7,3 +7,5 @@ export class UnhandledError extends ApiError {}
 export class RegistrationError extends ApiError {}
 
 export class AuthenticationError extends ApiError {}
+
+export class InvalidDataError extends ApiError {}

@@ -57,10 +57,8 @@ export function useApi() {
         });
         return;
       }
-      // toast.error(error.message, {
-      //   closeButton: true
-      // });
-      // throw error;
+      toast.error(error.message);
+      throw error;
     }
   }
 

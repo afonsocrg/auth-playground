@@ -20,7 +20,7 @@ export default function App() {
       >
         <AuthProvider>
           <NotificationProvider>
-            {/* <Toaster richColors position="top-right" duration={2500} /> */}
+            <Toaster richColors position="top-right" duration={2500} />
             <Layout navBar={<Navbar />} content={<AppRoutes />} />
           </NotificationProvider>
         </AuthProvider>
