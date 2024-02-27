@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { users, User } from "../db/schema/users";
-import { RegistrationError, UnexpectedError } from "./errors";
+import { NotFoundError, RegistrationError, UnexpectedError } from "./errors";
 import { checkPassword, hashPassword } from "utils/crypto";
 
 const userSchema = {
@@ -70,5 +70,20 @@ export async function loginUser(
     return null;
   }
 
+  return user;
+}
+
+export async function deleteUser(env, id: number): Promise<User> {
+  const result = await drizzle(env.DB)
+    .delete(users)
+    .where(eq(users.id, id))
+    .returning(userSchema);
+  if (result.length === 0) {
+    throw new NotFoundError(`User with id ${id} not found`);
+  }
+  if (result.length > 1) {
+    throw new UnexpectedError(`Query returned ${result.length} rows`);
+  }
+  const user = result[0];
   return user;
 }

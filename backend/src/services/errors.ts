@@ -1,4 +1,4 @@
-class BaseError extends Error {}
+export class BaseError extends Error {}
 
 export class RegistrationError extends BaseError {
   constructor(message) {

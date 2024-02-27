@@ -6,8 +6,8 @@ export const user_sessions = sqliteTable("user_sessions", {
   userId: integer("user_id")
     .notNull()
     .references(() => users.id, {
-      onDelete: "restrict",
-      onUpdate: "restrict",
+      onDelete: "cascade",
+      onUpdate: "cascade",
     }),
   accessToken: text("access_token").notNull().unique(),
   accessExpiration: integer("access_expiration", { mode: "timestamp_ms" }),

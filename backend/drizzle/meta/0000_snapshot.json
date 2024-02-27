@@ -1,9 +1,61 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "2d60e0af-8215-40a6-a7bd-7de75aaf676a",
+  "id": "dc1a6677-6b32-4541-8d5f-9afacdccbe04",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "todos": {
+      "name": "todos",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "done": {
+          "name": "done",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "todos_user_id_users_id_fk": {
+          "name": "todos_user_id_users_id_fk",
+          "tableFrom": "todos",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "user_sessions": {
       "name": "user_sessions",
       "columns": {
@@ -50,7 +102,22 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_sessions_access_token_unique": {
+          "name": "user_sessions_access_token_unique",
+          "columns": [
+            "access_token"
+          ],
+          "isUnique": true
+        },
+        "user_sessions_refresh_token_unique": {
+          "name": "user_sessions_refresh_token_unique",
+          "columns": [
+            "refresh_token"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "user_sessions_user_id_users_id_fk": {
           "name": "user_sessions_user_id_users_id_fk",
@@ -62,8 +129,8 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "restrict",
-          "onUpdate": "restrict"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -86,7 +153,7 @@
           "notNull": true,
           "autoincrement": false
         },
-        "name": {
+        "username": {
           "name": "username",
           "type": "text",
           "primaryKey": false,

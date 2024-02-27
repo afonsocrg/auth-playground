@@ -5,5 +5,5 @@ compatibility_flags = [ "nodejs_compat" ]
 
 [[d1_databases]]
 binding = "DB"
-database_name = "dev-openapi-auth"
-database_id = "a52efb6f-e6e5-4e00-8d73-4b42022a1d0e"
+database_name = "auth-playground"
+database_id = "636fd0b1-316d-4ca3-8ca0-3181e706844a"

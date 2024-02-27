@@ -49,7 +49,7 @@ export default class GetTodo extends OpenAPIRoute {
 
     try {
       const todo = await getUserTodo(env, user.id, id);
-      return { success: true, todo };
+      return { success: true, result: { todo } };
     } catch (error) {
       if (error instanceof NotFoundError) {
         return Response.json(

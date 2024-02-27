@@ -6,8 +6,8 @@ export const todos = sqliteTable("todos", {
   userId: integer("user_id")
     .notNull()
     .references(() => users.id, {
-      onDelete: "restrict",
-      onUpdate: "restrict",
+      onDelete: "cascade",
+      onUpdate: "cascade",
     }),
   done: integer("done", { mode: "boolean" }).default(false).notNull(),
   name: text("name").notNull(),
