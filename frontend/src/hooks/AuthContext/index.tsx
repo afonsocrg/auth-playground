@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import type { User } from "@services/api";
 

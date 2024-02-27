@@ -40,7 +40,11 @@ export default function Navbar() {
           label: "Log Out",
           icon: <LogoutOutlined />,
           onClick: async () => {
-            await api.logout();
+            try {
+              await api.logout();
+            } catch (error) {
+              console.log(error);
+            }
             logout();
             navigate("/");
           },

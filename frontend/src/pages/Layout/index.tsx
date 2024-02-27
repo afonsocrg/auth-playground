@@ -24,7 +24,11 @@ export default function MyLayout({ navBar, content }) {
         </div>
       </Content>
       <Footer className="footer">
-        <div></div>
+        <div className="privacy-policy">
+          <Link to="privacy_policy" style={{ color: "#888888" }}>
+            Privacy Policy
+          </Link>
+        </div>
         <div>©{new Date().getFullYear()} afonsocrg</div>
         <div className="github-logo">
           <Link

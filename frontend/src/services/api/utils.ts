@@ -1,23 +1,24 @@
 import { useLocation, useNavigate, createSearchParams } from "react-router-dom";
+import { toast } from "sonner";
+
 import { refreshToken } from "./auth";
 import { AuthenticationError } from "./errors";
 import { useAuth } from "@hooks/AuthContext";
 import { getUrlFromLocation } from "@utils/urls";
+import { AxiosError } from "axios";
+import { useNotification } from "@hooks/NotificationContext";
 
-export type Options = {
-  refresh?: boolean;
-};
 export async function refreshWrapper<ReturnType>(
-  fn: () => Promise<ReturnType>,
-  { refresh = true }: Options = {}
+  fn: () => Promise<ReturnType>
 ) {
   try {
     return await fn();
   } catch (error) {
-    if (refresh && error.response.status === 401) {
+    if (error instanceof AxiosError && error.response.status === 401) {
       await refreshToken();
       return await fn();
     }
+
     throw error;
   }
 }
@@ -26,6 +27,7 @@ export function useApi() {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const location = useLocation();
+  const { notificationApi } = useNotification();
 
   /**
    * Fetches data from the API, handling access token refreshing and error handling.
@@ -55,7 +57,10 @@ export function useApi() {
         });
         return;
       }
-      throw error;
+      // toast.error(error.message, {
+      //   closeButton: true
+      // });
+      // throw error;
     }
   }
 

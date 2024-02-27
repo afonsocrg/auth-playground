@@ -17,7 +17,7 @@ export async function getTodos(): Promise<Todo[]> {
   const response = await axios.get(`${BASE_URL}/api/todos`, {
     withCredentials: true,
   });
-  return response.data.todos;
+  return response.data.result.todos;
 }
 
 export async function removeTodo(id: number): Promise<void> {
@@ -27,7 +27,7 @@ export async function removeTodo(id: number): Promise<void> {
   return;
 }
 
-export async function changeTodo(id: number, newName: string) {
+export async function changeTodo(id: number, newName: string): Promise<Todo> {
   const response = await axios.put(
     `${BASE_URL}/api/todos/${id}`,
     { name: newName },

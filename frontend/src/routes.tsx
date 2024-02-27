@@ -8,9 +8,9 @@ import Profile from "@pages/Profile";
 import Register from "@pages/Register";
 import Todos from "@pages/Todos";
 import ApiDocs from "@pages/ApiDocs";
+import PrivacyPolicy from "@pages/PrivacyPolicy";
+import TermsAndConditions from "@pages/TermsAndConditions";
 import { useAuth } from "@hooks/AuthContext";
-
-// import { useCustomAuth, AuthenticationGuard } from './hooks/useCustomAuth'
 
 function PrivateRoute() {
   const { isAuthenticated } = useAuth();
@@ -28,11 +28,13 @@ export function AppRoutes() {
     <Suspense fallback={'Loading...'}>
       <Routes>
         <Route path='/'>
-          <Route index                  element={<Home/>                        } />
-          <Route path='docs'            element={<ApiDocs/>                     } />
-          <Route path='login'           element={<Login/>                       } />
-          <Route path='register'        element={<Register/>                    } />
-          <Route path='*'               element={<NotFound />                   } />
+          <Route index                        element={<Home/>                        } />
+          <Route path='docs'                  element={<ApiDocs/>                     } />
+          <Route path='privacy_policy'        element={<PrivacyPolicy/>               } />
+          <Route path='terms_and_conditions'  element={<TermsAndConditions/>          } />
+          <Route path='login'                 element={<Login/>                       } />
+          <Route path='register'              element={<Register/>                    } />
+          <Route path='*'                     element={<NotFound />                   } />
           <Route element={<PrivateRoute/>}>
             <Route path='profile'         element={<Profile/>                   } />
             <Route path='todos'         element={<Todos/>                       } />
