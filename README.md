@@ -6,6 +6,11 @@ This Toy To Do app serves as a proof of concept for exploring various aspects of
  - validate username and email when registering
  - Cannot log in if user already logged in
  - Clear login fields when invalid credentials
+ - Pagination
+ - Filters
+ - Recover password
+ - oAuth
+ - GDPR
 
 ## Features
 
@@ -57,7 +62,7 @@ Contributions to this project are welcomed. Whether it's fixing bugs, adding new
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/afonsocrg/auth-playground/blob/main/LICENSE) file for details.
 
 ## Disclaimer
 
