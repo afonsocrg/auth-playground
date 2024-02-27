@@ -10,11 +10,11 @@ import ConfirmationModal from "@components/ConfirmationModal";
 const { Title, Text } = Typography;
 
 export default function Profile() {
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState<api.Profile>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, login } = useAuth();
   const { fetch } = api.useApi();
 
   useEffect(() => {
@@ -32,9 +32,30 @@ export default function Profile() {
     navigate("/");
   };
 
-  const handleOk = () => {
+  const handleModalOk = () => {
     setIsModalOpen(false);
     deleteProfile();
+  };
+
+  const updateProfile = async (payload) => {
+    const newProfile = await api.editProfile(payload);
+    login(newProfile);
+    setProfile(newProfile);
+  };
+
+  const handleChangeUsername = (newName) => {
+    console.log("New name!!", newName);
+    if (newName === profile.username) {
+      return;
+    }
+    updateProfile({ username: newName });
+  };
+  const handleChangeEmail = (newEmail) => {
+    console.log("New email!!", newEmail);
+    if (newEmail === profile.email) {
+      return;
+    }
+    updateProfile({ email: newEmail });
   };
 
   return profile ? (
@@ -48,9 +69,25 @@ export default function Profile() {
       </div>
       <div className="profile-details">
         <div className="username">
-          <Text ellipsis>{profile.username}</Text>
+          <Text
+            editable={{
+              onChange: handleChangeUsername,
+              triggerType: ["text", "icon"],
+            }}
+          >
+            {profile.username}
+          </Text>
         </div>
-        <div className="email">{profile.email}</div>
+        <div className="email">
+          <Text
+            editable={{
+              onChange: handleChangeEmail,
+              triggerType: ["text", "icon"],
+            }}
+          >
+            {profile.email}
+          </Text>
+        </div>
       </div>
       <Button danger onClick={() => setIsModalOpen(true)}>
         Delete Profile
@@ -59,7 +96,7 @@ export default function Profile() {
         isOpen={isModalOpen}
         title="Are you sure you want to delete your profile?"
         message={"All your data and To-Dos will be lost"}
-        handleOk={handleOk}
+        handleOk={handleModalOk}
         closeModal={() => setIsModalOpen(false)}
         confirmationInput={profile.email}
       />

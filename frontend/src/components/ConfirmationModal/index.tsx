@@ -24,6 +24,11 @@ export default function ConfirmationModal({
   const [showError, setShowError] = useState(false);
   const isConfirmed = input === confirmationInput;
 
+  const handleInputChange = (newValue) => {
+    setShowError(false);
+    setInput(newValue);
+  };
+
   const handleConfirm = () => {
     if (!isConfirmed) {
       setShowError(true);
@@ -31,11 +36,6 @@ export default function ConfirmationModal({
     }
     setInput("");
     handleOk();
-  };
-
-  const handleInputChange = (newValue) => {
-    setShowError(false);
-    setInput(newValue);
   };
 
   const handleCancel = () => {
