@@ -68,30 +68,36 @@ export default function Profile() {
         />
       </div>
       <div className="profile-details">
-        <div className="username">
+        <div>
           <Text
             editable={{
               onChange: handleChangeUsername,
               triggerType: ["text", "icon"],
+              enterIcon: null,
             }}
+            className="username"
           >
             {profile.username}
           </Text>
         </div>
-        <div className="email">
+        <div>
           <Text
             editable={{
               onChange: handleChangeEmail,
               triggerType: ["text", "icon"],
+              enterIcon: null,
             }}
+            className="email"
           >
             {profile.email}
           </Text>
         </div>
+        <div className="delete-button">
+          <Button danger onClick={() => setIsModalOpen(true)}>
+            Delete Profile
+          </Button>
+        </div>
       </div>
-      <Button danger onClick={() => setIsModalOpen(true)}>
-        Delete Profile
-      </Button>
       <ConfirmationModal
         isOpen={isModalOpen}
         title="Are you sure you want to delete your profile?"
