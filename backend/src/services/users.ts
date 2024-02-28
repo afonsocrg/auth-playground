@@ -135,19 +135,38 @@ export async function editUser(
   { username, email }: { username?: string; email?: string }
 ): Promise<User> {
   if (!username && !email) {
+    // If no data to update, return the current user
     return getUser(env, id);
   }
+
+  // Validate username and email
   if (username !== undefined) {
     validateUsername(username);
   }
   if (email !== undefined) {
     validateEmail(email);
   }
-  const result = await drizzle(env.DB)
-    .update(users)
-    .set({ username, email })
-    .where(eq(users.id, id))
-    .returning(userSchema);
+
+  let result;
+  try {
+    result = await drizzle(env.DB)
+      .update(users)
+      .set({ username, email })
+      .where(eq(users.id, id))
+      .returning(userSchema);
+  } catch (error) {
+    if (error instanceof Error) {
+      if (
+        error.message === "D1_ERROR: UNIQUE constraint failed: users.username"
+      ) {
+        throw new DataError("Username already in use!");
+      } else if (
+        error.message === "D1_ERROR: UNIQUE constraint failed: users.email"
+      ) {
+        throw new DataError("Email already in use!");
+      }
+    }
+  }
   if (result.length > 1) {
     throw new UnexpectedError(`Update returned ${result.length} rows`);
   }
