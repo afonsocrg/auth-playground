@@ -8,7 +8,9 @@ This software uses Cloudflare Workers to run the backend, a D1 (SQLite) database
 ## Features
 
 - **Account Management**: Users can sign up for a new account, manage their personal information, and delete their account;
+
 - **Session Management**: Registered users can log in using their credentials (and eventually a third-party authentication service), and log out. The token expiration and refresh logic is done automatically;
+
 - **Password Recovery**: Option for users to recover their passwords in case they forget them. (Not implemented yet)
 
 ## Privacy
@@ -41,6 +43,7 @@ To get started with this project, follow these steps:
    
    * Log-in your wrangler CLI into Cloudflare
    ```bash
+   $ cd backend # Make sure you are in the .../backend directory
    $ bun wrangler login
    ```
 
@@ -61,7 +64,7 @@ To get started with this project, follow these steps:
 1. **Set Up Environment Variables**: Set up necessary environment variables. For now you shouldn't need to edit the frontend's `.env` file, but check if the server port.
 
    ```bash
-   $ cd frontend
+   $ cd ../frontend # Make sure you are in the .../frontend directory
    $ cp .env.example .env
    ```
 

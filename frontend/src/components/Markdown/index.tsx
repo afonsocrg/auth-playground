@@ -1,10 +1,14 @@
+import "./styles.css";
+import { Link } from "react-router-dom";
 import { Typography } from "antd";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import Loading from "@components/Loading";
-import { Link } from "react-router-dom";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
-const { Title, Text } = Typography;
+import Loading from "@components/Loading";
+
+const { Title, Text, Paragraph } = Typography;
 // const renderers = {
 //   heading: function Heading(props) {
 //     return <Title level={props.level}>{props.children}</Title>;
@@ -45,6 +49,21 @@ export default function MyMarkdown({ markdown }: Props) {
         em: ({ children }) => <Text italic>{children}</Text>,
         a: ({ href, children }) => {
           return <Link to={href}>{children}</Link>;
+        },
+        code: ({ children, className, ...props }) => {
+          let multiLine =
+            typeof children === "string" && children.includes("\n");
+
+          if (!multiLine) {
+            return <Text code>{children}</Text>;
+          }
+          return (
+            <div className="multiline-code">
+              <SyntaxHighlighter language="bash" style={github}>
+                {children}
+              </SyntaxHighlighter>
+            </div>
+          );
         },
       }}
     >
