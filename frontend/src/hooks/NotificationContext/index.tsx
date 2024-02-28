@@ -1,26 +1,25 @@
+import { NotificationInstance } from "antd/es/notification/interface";
 import { useContext, createContext } from "react";
-import { notification } from "antd";
 
 type NotificationProviderType = {
-  notificationApi: any;
-  contextHolder: any;
+  api: NotificationInstance;
 };
 const NotificationContext = createContext({} as NotificationProviderType);
 
-export default function NotificationProvider({ children }) {
-  const [notificationApi, contextHolder] = notification.useNotification();
-
-  notificationApi.error({
-    message: "This is a test message",
-  });
-
+// Documentation: https://ant.design/components/notification
+export default function NotificationProvider({ api, children }) {
   return (
-    <NotificationContext.Provider value={{ notificationApi, contextHolder }}>
+    <NotificationContext.Provider value={{ api }}>
       {children}
     </NotificationContext.Provider>
   );
 }
 
 export const useNotification = () => {
-  return useContext(NotificationContext);
+  const context = useContext(NotificationContext);
+  if (context === undefined)
+    throw new Error(
+      "NotificationContext was used outside the NotificationProvider"
+    );
+  return context;
 };

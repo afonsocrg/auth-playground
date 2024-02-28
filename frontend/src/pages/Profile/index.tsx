@@ -39,19 +39,19 @@ export default function Profile() {
 
   const updateProfile = async (payload) => {
     const newProfile = await fetch(() => api.editProfile(payload));
-    login(newProfile);
-    setProfile(newProfile);
+    if (newProfile) {
+      login(newProfile);
+      setProfile(newProfile);
+    }
   };
 
   const handleChangeUsername = (newName) => {
-    console.log("New name!!", newName);
     if (newName === profile.username) {
       return;
     }
     updateProfile({ username: newName });
   };
   const handleChangeEmail = (newEmail) => {
-    console.log("New email!!", newEmail);
     if (newEmail === profile.email) {
       return;
     }

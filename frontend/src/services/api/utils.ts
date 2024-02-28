@@ -1,8 +1,7 @@
 import { useLocation, useNavigate, createSearchParams } from "react-router-dom";
-import { toast } from "sonner";
 
 import { refreshToken } from "./auth";
-import { AuthenticationError } from "./errors";
+import { ApiError, AuthenticationError } from "./errors";
 import { useAuth } from "@hooks/AuthContext";
 import { getUrlFromLocation } from "@utils/urls";
 import { AxiosError } from "axios";
@@ -27,7 +26,7 @@ export function useApi() {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const location = useLocation();
-  const { notificationApi } = useNotification();
+  const { api: notificationApi } = useNotification();
 
   /**
    * Fetches data from the API, handling access token refreshing and error handling.
@@ -56,8 +55,13 @@ export function useApi() {
           }).toString(),
         });
         return;
+      } else if (error instanceof ApiError) {
+        notificationApi.error({
+          message: "Something went wrong",
+          description: error.message,
+        });
+        return;
       }
-      toast.error(error.message);
       throw error;
     }
   }

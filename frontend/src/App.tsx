@@ -1,16 +1,15 @@
 import { BrowserRouter } from "react-router-dom";
-import { Toaster } from "sonner";
-import { AppRoutes } from "./routes";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, notification } from "antd";
 
+import { AppRoutes } from "./routes";
 import Layout from "@pages/Layout";
 import Navbar from "@components/Navbar";
 import AuthProvider from "@hooks/AuthContext";
-import NotificationProvider, {
-  useNotification,
-} from "@hooks/NotificationContext";
+import NotificationProvider from "@hooks/NotificationContext";
 
 export default function App() {
+  const [api, contextHolder] = notification.useNotification();
+
   return (
     <BrowserRouter>
       <ConfigProvider
@@ -19,8 +18,8 @@ export default function App() {
         }}
       >
         <AuthProvider>
-          <NotificationProvider>
-            <Toaster richColors position="top-right" duration={2500} />
+          <NotificationProvider api={api}>
+            {contextHolder}
             <Layout navBar={<Navbar />} content={<AppRoutes />} />
           </NotificationProvider>
         </AuthProvider>
