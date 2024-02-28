@@ -1,7 +1,6 @@
 import "./styles.css";
-import { useState } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { Button, Form, Input, Checkbox, Typography } from "antd";
+import { Link, useSearchParams, useNavigate, Navigate } from "react-router-dom";
+import { Button, Form, Input, Typography } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import * as api from "@services/api";
@@ -9,7 +8,7 @@ import { useAuth } from "@hooks/AuthContext";
 import { useNotification } from "@hooks/NotificationContext";
 import { InvalidCredentialsError } from "@services/api/errors";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 type FieldType = {
   username?: string;
@@ -18,7 +17,7 @@ type FieldType = {
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const { api: notificationApi } = useNotification();
 
   const [searchParams, _] = useSearchParams();
@@ -40,6 +39,10 @@ export default function Login() {
       throw error;
     }
   };
+
+  if (isAuthenticated) {
+    return <Navigate to="/todos"></Navigate>;
+  }
 
   return (
     <div className="login-container">

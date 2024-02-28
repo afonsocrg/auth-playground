@@ -1,8 +1,7 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import { Button, Form, Input, Space, Typography, Checkbox } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 import * as api from "@services/api";
 import { RegistrationError } from "@services/api/errors";
@@ -19,7 +18,7 @@ type FieldType = {
 
 export default function Register() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const { fetch } = api.useApi();
   const { api: notificationApi } = useNotification();
 
@@ -53,6 +52,11 @@ export default function Register() {
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
+
+  if (isAuthenticated) {
+    return <Navigate to="/todos"></Navigate>;
+  }
+
   return (
     <>
       <Title level={1}>Sign up</Title>
