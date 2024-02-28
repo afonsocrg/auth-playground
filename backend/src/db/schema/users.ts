@@ -12,6 +12,9 @@ export const users = sqliteTable(
     email: text("email").notNull(),
     username: text("username").notNull(),
     passwordHash: text("password_hash").notNull(),
+    acceptedTermsAndConditionsAt: integer("accepted_terms_and_conditions_at", {
+      mode: "timestamp_ms",
+    }),
   },
   (users) => ({
     emailIdx: uniqueIndex("emailIdx").on(users.email),
@@ -19,6 +22,9 @@ export const users = sqliteTable(
   })
 );
 
-export type FullUser = typeof users.$inferSelect
-export type User = Omit<FullUser, 'passwordHash'>
-export type InsertUser = typeof users.$inferInsert
+export type FullUser = typeof users.$inferSelect;
+export type User = Omit<
+  FullUser,
+  "passwordHash" | "acceptedTermsAndConditionsAt"
+>;
+export type InsertUser = typeof users.$inferInsert;

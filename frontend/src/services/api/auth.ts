@@ -11,9 +11,10 @@ import { BASE_URL } from "./consts";
 export async function register(
   email: string,
   username: string,
-  password: string
+  password: string,
+  terms_and_conditions
 ): Promise<User> {
-  const data = { email, username, password };
+  const data = { email, username, password, terms_and_conditions };
   try {
     const response = await axios.post(`${BASE_URL}/auth/register`, data, {
       withCredentials: true,

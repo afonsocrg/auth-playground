@@ -42,9 +42,10 @@ export class Register extends OpenAPIRoute {
     data: Record<string, any>
   ) {
     // Retrieve the validated request body
-    const { username, email, password } = data.body;
+    const { username, email, password, terms_and_conditions } = data.body;
+
     try {
-      const user = await registerUser(env, username, email, password);
+      const user = await registerUser(env, username, email, password, terms_and_conditions);
       const session = await createSession(env, user.id);
       const headers = new Headers();
       headers.append(
