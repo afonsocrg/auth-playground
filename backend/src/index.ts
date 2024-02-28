@@ -18,13 +18,18 @@ import {
   EditProfile,
   DeleteProfile,
 } from "./endpoints";
+import { debugResponse } from "utils/debug";
 
 export const router = OpenAPIRouter({
   docs_url: "/docs",
 });
 
 const { preflight, corsify } = createCors({
-  origins: ["http://localhost:5173", "https://auth-playground.afonsocrg.com"],
+  origins: [
+    "http://localhost:5173",
+    "https://auth-playground.afonsocrg.com",
+    "https://auth-playground.pages.dev",
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   // It looks like the methods are not working...
   headers: {

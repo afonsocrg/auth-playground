@@ -50,12 +50,13 @@ function setTokenCookie(
   expiration: Date,
   path: string
 ): string {
-  const httpOnly = false; // TODO: make false only if in dev / .env variable
+  const httpOnly = true; // TODO: make false only if in dev / .env variable
   return createCookie(name, value, {
     path,
     expires: expiration,
-    sameSite: "Lax",
+    sameSite: "Strict",
     httpOnly,
+    secure: true,
   });
 }
 
@@ -63,12 +64,7 @@ export function setAccessTokenCookie(
   accessToken: string,
   accessExpiration: Date
 ) {
-  return setTokenCookie(
-    ACCESS_TOKEN_KEY,
-    accessToken,
-    accessExpiration,
-    "/"
-  );
+  return setTokenCookie(ACCESS_TOKEN_KEY, accessToken, accessExpiration, "/");
 }
 
 export function setRefreshTokenCookie(
