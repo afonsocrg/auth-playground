@@ -31,6 +31,7 @@ export async function register(
 
 export async function login(username: string, password: string): Promise<User> {
   const data = { username, password };
+  console.log("Logging in to ", `${API_BASE_URL}/auth/login`);
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, data, {
       withCredentials: true,
