@@ -54,13 +54,13 @@ export function useApi() {
             redirect: getUrlFromLocation(location),
           }).toString(),
         });
-        return;
+        return null;
       } else if (error instanceof ApiError) {
         notificationApi.error({
           message: "Something went wrong",
           description: error.message,
         });
-        return;
+        return null;
       }
       throw error;
     }

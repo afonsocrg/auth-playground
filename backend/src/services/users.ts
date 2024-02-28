@@ -48,14 +48,24 @@ export async function registerUser(
   env,
   username: string,
   email: string,
-  password: string
+  password: string,
+  terms_and_conditions: boolean
 ): Promise<User> {
+  if (!terms_and_conditions) {
+    throw new RegistrationError("You must accept the terms and conditions");
+  }
+  const acceptDate = new Date();
   const passwordHash = hashPassword(password);
   const db = drizzle(env.DB);
   try {
     const results = await db
       .insert(users)
-      .values({ username, email, passwordHash })
+      .values({
+        username,
+        email,
+        passwordHash,
+        acceptedTermsAndConditionsAt: acceptDate,
+      })
       .returning(userSchema);
     const user = results[0];
     return user;

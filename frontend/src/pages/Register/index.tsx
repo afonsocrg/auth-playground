@@ -14,29 +14,36 @@ type FieldType = {
   email?: string;
   password?: string;
   confirm?: string;
+  terms_and_conditions?: boolean;
 };
 
 export default function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { fetch } = api.useApi();
   const { api: notificationApi } = useNotification();
 
   const onFinish = async (values: FieldType) => {
     try {
-      const user = await api.register(
-        values.email,
-        values.username,
-        values.password
+      console.log(values);
+      const user = await fetch(() =>
+        api.register(
+          values.email,
+          values.username,
+          values.password,
+          values.terms_and_conditions || false
+        )
       );
-      login(user);
-      navigate("/todos");
+      if (user) {
+        login(user);
+        navigate("/todos");
+      }
     } catch (error) {
       if (error instanceof RegistrationError) {
         notificationApi.error({
           message: "Failed to register user",
           description: error.message,
         });
-        // setError(error.message);
         return;
       }
       console.error("Caught error in page", error);
@@ -112,20 +119,22 @@ export default function Register() {
         <Form.Item
           name="terms_and_conditions"
           valuePropName="checked"
-          rules={[
-            ({}) => ({
-              validator(_, value) {
-                if (value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(
-                  new Error(
-                    "You must accept the Terms and Conditions to join the platform"
-                  )
-                );
-              },
-            }),
-          ]}
+          rules={
+            [
+              ({}) => ({
+                validator(_, value) {
+                  if (value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(
+                      "You must accept the Terms and Conditions to join the platform"
+                    )
+                  );
+                },
+              }),
+            ]
+          }
         >
           <Checkbox>
             I read and accept the{" "}
@@ -144,7 +153,6 @@ export default function Register() {
           </Space>
         </Form.Item>
       </Form>
-      ;
     </>
   );
 }
