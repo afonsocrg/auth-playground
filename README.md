@@ -10,7 +10,8 @@ This Toy To Do app serves as a proof of concept for exploring various aspects of
  - Filters
  - Recover password
  - oAuth
- - GDPR
+ - request to /docs in frontend does not pass through CORS
+ - Better error handling in api
 
 ## Features
 
