@@ -29,5 +29,10 @@ export default function AuthProvider({ children }) {
 }
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (context === undefined)
+  throw new Error(
+    "AuthContext was used outside the AuthProvider"
+  );
+  return context
 };
