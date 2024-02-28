@@ -1,11 +1,11 @@
-import { useLocation, useNavigate, createSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { refreshToken } from "./auth";
 import { ApiError, AuthenticationError } from "./errors";
 import { useAuth } from "@hooks/AuthContext";
-import { getUrlFromLocation } from "@utils/urls";
 import { AxiosError } from "axios";
 import { useNotification } from "@hooks/NotificationContext";
+import useTemporaryRedirect from "@hooks/temporaryRedirect";
 
 export async function refreshWrapper<ReturnType>(
   fn: () => Promise<ReturnType>
@@ -17,7 +17,6 @@ export async function refreshWrapper<ReturnType>(
       await refreshToken();
       return await fn();
     }
-
     throw error;
   }
 }
@@ -27,6 +26,7 @@ export function useApi() {
   const { logout } = useAuth();
   const location = useLocation();
   const { api: notificationApi } = useNotification();
+  const { temporaryRedirect } = useTemporaryRedirect();
 
   /**
    * Fetches data from the API, handling access token refreshing and error handling.
@@ -48,12 +48,7 @@ export function useApi() {
     } catch (error) {
       if (error instanceof AuthenticationError) {
         logout();
-        navigate({
-          pathname: "/login",
-          search: createSearchParams({
-            redirect: getUrlFromLocation(location),
-          }).toString(),
-        });
+        navigate(temporaryRedirect("/login"));
         return null;
       } else if (error instanceof ApiError) {
         notificationApi.error({

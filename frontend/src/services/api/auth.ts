@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { User } from "@services/api";
 import {
   AuthenticationError,
@@ -62,9 +62,11 @@ export async function refreshToken() {
     });
     return response;
   } catch (error) {
-    const response = error.response;
-    if (response.status === 401) {
-      throw new AuthenticationError();
+    if (error instanceof AxiosError) {
+      const response = error.response;
+      if (response.status === 401) {
+        throw new AuthenticationError();
+      }
     }
     throw error;
   }

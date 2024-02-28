@@ -11,14 +11,15 @@ import ApiDocs from "@pages/ApiDocs";
 import PrivacyPolicy from "@pages/PrivacyPolicy";
 import TermsAndConditions from "@pages/TermsAndConditions";
 import { useAuth } from "@hooks/AuthContext";
+import useTemporaryRedirect from "@hooks/temporaryRedirect";
 
 function PrivateRoute() {
   const { isAuthenticated } = useAuth();
+  const { temporaryRedirect } = useTemporaryRedirect();
   if (isAuthenticated) {
     return <Outlet />;
   } else {
-    // TODO: return back to previous page
-    return <Navigate to="login" />;
+    return <Navigate to={temporaryRedirect("/login")} />;
   }
 }
 
