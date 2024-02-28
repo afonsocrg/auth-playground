@@ -6,7 +6,7 @@ import {
   RegistrationError,
   UnhandledError,
 } from "./errors";
-import { BASE_URL } from "./consts";
+import { API_BASE_URL } from "./consts";
 
 export async function register(
   email: string,
@@ -16,7 +16,7 @@ export async function register(
 ): Promise<User> {
   const data = { email, username, password, terms_and_conditions };
   try {
-    const response = await axios.post(`${BASE_URL}/auth/register`, data, {
+    const response = await axios.post(`${API_BASE_URL}/auth/register`, data, {
       withCredentials: true,
     });
     return response.data;
@@ -32,7 +32,7 @@ export async function register(
 export async function login(username: string, password: string): Promise<User> {
   const data = { username, password };
   try {
-    const response = await axios.post(`${BASE_URL}/auth/login`, data, {
+    const response = await axios.post(`${API_BASE_URL}/auth/login`, data, {
       withCredentials: true,
     });
     return response.data.data;
@@ -47,7 +47,7 @@ export async function login(username: string, password: string): Promise<User> {
 
 export async function logout() {
   try {
-    await axios.post(`${BASE_URL}/auth/logout`, null, {
+    await axios.post(`${API_BASE_URL}/auth/logout`, null, {
       withCredentials: true,
     });
   } catch (error) {
@@ -57,7 +57,7 @@ export async function logout() {
 
 export async function refreshToken() {
   try {
-    const response = await axios.get(`${BASE_URL}/auth/refresh`, {
+    const response = await axios.get(`${API_BASE_URL}/auth/refresh`, {
       withCredentials: true,
     });
     return response;

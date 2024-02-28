@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { BASE_URL } from "./consts";
+import { API_BASE_URL } from "./consts";
 import { InvalidDataError } from "./errors";
 
 export type Profile = {
@@ -9,7 +9,7 @@ export type Profile = {
 };
 
 export async function getProfile(): Promise<Profile> {
-  const response = await axios.get(`${BASE_URL}/api/profile`, {
+  const response = await axios.get(`${API_BASE_URL}/api/profile`, {
     withCredentials: true,
   });
   return response.data.result.user;
@@ -24,7 +24,7 @@ export async function editProfile({
 }): Promise<Profile> {
   try {
     const response = await axios.put(
-      `${BASE_URL}/api/profile`,
+      `${API_BASE_URL}/api/profile`,
       { username, email },
       { withCredentials: true }
     );
@@ -41,7 +41,7 @@ export async function editProfile({
 }
 
 export async function deleteProfile(): Promise<void> {
-  const response = await axios.delete(`${BASE_URL}/api/profile`, {
+  const response = await axios.delete(`${API_BASE_URL}/api/profile`, {
     withCredentials: true,
   });
   return;
