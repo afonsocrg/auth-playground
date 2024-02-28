@@ -24,7 +24,7 @@ export const router = OpenAPIRouter({
 });
 
 const { preflight, corsify } = createCors({
-  origins: ["http://localhost:5173"],
+  origins: ["http://localhost:5173", "https://auth-playground.afonsocrg.com"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   // It looks like the methods are not working...
   headers: {
