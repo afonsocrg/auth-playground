@@ -7,6 +7,7 @@ const { Text, Title } = Typography;
 import * as api from "@services/api";
 import { RegistrationError } from "@services/api/errors";
 import { useAuth } from "@hooks/AuthContext";
+import { useNotification } from "@hooks/NotificationContext";
 
 type FieldType = {
   username?: string;
@@ -18,11 +19,10 @@ type FieldType = {
 export default function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [error, setError] = useState<string>(null);
+  const { api: notificationApi } = useNotification();
 
   const onFinish = async (values: FieldType) => {
     try {
-      setError(null);
       const user = await api.register(
         values.email,
         values.username,
@@ -32,7 +32,11 @@ export default function Register() {
       navigate("/todos");
     } catch (error) {
       if (error instanceof RegistrationError) {
-        setError(error.message);
+        notificationApi.error({
+          message: "Failed to register user",
+          description: error.message,
+        });
+        // setError(error.message);
         return;
       }
       console.error("Caught error in page", error);
@@ -109,14 +113,18 @@ export default function Register() {
           name="terms_and_conditions"
           valuePropName="checked"
           rules={[
-            ({ }) => ({
+            ({}) => ({
               validator(_, value) {
                 if (value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error("You must accept the Terms and Conditions to join the platform"));
+                return Promise.reject(
+                  new Error(
+                    "You must accept the Terms and Conditions to join the platform"
+                  )
+                );
               },
-            })
+            }),
           ]}
         >
           <Checkbox>
@@ -126,9 +134,8 @@ export default function Register() {
             </Link>
           </Checkbox>
         </Form.Item>
-        {error && <Text type="danger">{error}</Text>}
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Form.Item>
           <Space>
             <Button type="primary" htmlType="submit">
               Submit
