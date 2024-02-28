@@ -8,7 +8,7 @@ import * as api from "@services/api";
 import { useAuth } from "@hooks/AuthContext";
 import { InvalidCredentialsError } from "@services/api/errors";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 type FieldType = {
   username?: string;
@@ -39,8 +39,8 @@ export default function Login() {
   };
 
   return (
-    <>
-      <h1>Log in</h1>
+    <div className="login-container">
+      <Title level={1}>Log in</Title>
       <Form
         name="normal_login"
         className="login-form"
@@ -69,16 +69,16 @@ export default function Login() {
         {invalidCredentials && (
           <Text type="danger">Username or password are incorrect</Text>
         )}
-        <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-          {/* <a className="login-form-forgot" href=""> */}
-          <Link to="/login" className="login-form-forgot">
-            Forgot password
-          </Link>
-          {/* </a> */}
-        </Form.Item>
+        {/* <Form.Item> */}
+        {/* <Form.Item name="remember" valuePropName="checked" noStyle> */}
+        {/* <Checkbox>Remember me</Checkbox> */}
+        {/* </Form.Item> */}
+        {/* <a className="login-form-forgot" href=""> */}
+        {/* <Link to="/login" className="login-form-forgot"> */}
+        {/* Forgot password */}
+        {/* </Link> */}
+        {/* </a> */}
+        {/* </Form.Item> */}
 
         <Form.Item>
           <Button
@@ -91,6 +91,6 @@ export default function Login() {
           Or <Link to="/register">register now!</Link>
         </Form.Item>
       </Form>
-    </>
+    </div>
   );
 }

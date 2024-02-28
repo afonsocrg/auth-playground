@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Form, Input, Space, Typography } from "antd";
+import { Button, Form, Input, Space, Typography, Checkbox } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 import * as api from "@services/api";
 import { RegistrationError } from "@services/api/errors";
@@ -44,9 +44,9 @@ export default function Register() {
   };
   return (
     <>
-      <h1>Sign up</h1>
+      <Title level={1}>Sign up</Title>
       <Form
-        name="basic"
+        name="registration"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
@@ -104,6 +104,27 @@ export default function Register() {
             prefix={<LockOutlined className="site-form-item-icon" />}
             placeholder="Confirm Password"
           />
+        </Form.Item>
+        <Form.Item
+          name="terms_and_conditions"
+          valuePropName="checked"
+          rules={[
+            ({ }) => ({
+              validator(_, value) {
+                if (value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("You must accept the Terms and Conditions to join the platform"));
+              },
+            })
+          ]}
+        >
+          <Checkbox>
+            I read and accept the{" "}
+            <Link to="/terms_and_conditions" target="_blank">
+              Terms and Conditions
+            </Link>
+          </Checkbox>
         </Form.Item>
         {error && <Text type="danger">{error}</Text>}
 
