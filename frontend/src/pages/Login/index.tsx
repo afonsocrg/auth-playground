@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import * as api from "@services/api";
 import { useAuth } from "@hooks/AuthContext";
+import { useNotification } from "@hooks/NotificationContext";
 import { InvalidCredentialsError } from "@services/api/errors";
 
 const { Text, Title } = Typography;
@@ -18,8 +19,7 @@ type FieldType = {
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
-
-  const [invalidCredentials, setInvalidCredentials] = useState(false);
+  const { api: notificationApi } = useNotification();
 
   const [searchParams, _] = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/todos";
@@ -31,7 +31,10 @@ export default function Login() {
       navigate(redirectPath);
     } catch (error) {
       if (error instanceof InvalidCredentialsError) {
-        setInvalidCredentials(true);
+        notificationApi.error({
+          message: "Failed to Log In",
+          description: "Username or password are incorrect",
+        });
       }
       console.error("Unhandled error", error);
       throw error;
@@ -46,7 +49,6 @@ export default function Login() {
         className="login-form"
         onFinish={onFinish}
         wrapperCol={{ span: 8 }}
-        onFieldsChange={() => setInvalidCredentials(false)}
       >
         <Form.Item
           name="username"
@@ -66,9 +68,7 @@ export default function Login() {
             placeholder="Password"
           />
         </Form.Item>
-        {invalidCredentials && (
-          <Text type="danger">Username or password are incorrect</Text>
-        )}
+
         {/* <Form.Item> */}
         {/* <Form.Item name="remember" valuePropName="checked" noStyle> */}
         {/* <Checkbox>Remember me</Checkbox> */}
