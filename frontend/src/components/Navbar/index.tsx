@@ -9,6 +9,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "@services/api/consts";
 
 export default function Navbar() {
   const { isAuthenticated, logout } = useAuth();
@@ -17,7 +18,11 @@ export default function Navbar() {
   const commonNavbar = [
     {
       key: "docs",
-      label: <Link to="/docs">API Docs</Link>,
+      label: (
+        <Link to={`${API_BASE_URL}/docs`} target="_blank">
+          API Docs
+        </Link>
+      ),
       icon: <FileOutlined />,
     },
   ];
